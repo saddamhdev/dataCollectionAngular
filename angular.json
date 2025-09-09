@@ -34,19 +34,7 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts",
-              "prerender": {
-                "discoverRoutes": false,
-                "routes": [
-                  "/",
-                  "/dashboard/home",
-                  "/dashboard/data",
-                  "/dashboard/userList",
-                  "/dashboard/imageList",
-                  "/dashboard/pagePermission",
-                  "/info",
-                  "/khabar"
-                ]
-              }
+              "prerender": true
             }
           },
           "configurations": {
