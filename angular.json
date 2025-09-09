@@ -33,19 +33,20 @@
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
-              "entry": "src/server.ts"
-            },
-            "prerender": {
-              "routes": [
-                "/",
-                "/dashboard/home",
-                "/dashboard/data",
-                "/dashboard/userList",
-                "/dashboard/imageList",
-                "/dashboard/pagePermission",
-                "/info",
-                "/khabar"
-              ]
+              "entry": "src/server.ts",
+              "prerender": {
+                "discoverRoutes": false,
+                "routes": [
+                  "/",
+                  "/dashboard/home",
+                  "/dashboard/data",
+                  "/dashboard/userList",
+                  "/dashboard/imageList",
+                  "/dashboard/pagePermission",
+                  "/info",
+                  "/khabar"
+                ]
+              }
             }
           },
           "configurations": {
