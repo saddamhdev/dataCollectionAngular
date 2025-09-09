@@ -10,7 +10,7 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'info', // Public form
+    path: 'info',
     loadComponent: () =>
       import('./student-submit/student-submit.component').then(
         (m) => m.StudentSubmitComponent
@@ -120,7 +120,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'hscForm', // Private form (same component as /info)
+        path: 'hscForm',
         loadComponent: () =>
           import('./student-submit/student-submit.component').then(
             (m) => m.StudentSubmitComponent
@@ -134,7 +134,7 @@ export const routes: Routes = [
           ),
       },
 
-      // Dynamic edit routes (⚡ marked client-only to fix prerender issue)
+      // ⚡ Dynamic edit routes marked client-only
       {
         path: 'students/editSSC/:id',
         loadComponent: () =>
