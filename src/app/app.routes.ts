@@ -127,35 +127,38 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'sscForm', // Private form (same component as /info)
+        path: 'sscForm',
         loadComponent: () =>
           import('./pages/ssc-form/ssc-form.component').then(
             (m) => m.SscFormComponent
           ),
       },
+
+      // Dynamic edit routes (⚡ marked client-only to fix prerender issue)
       {
-        path: 'hscForm', // Private form (same component as /info)
+        path: 'students/editSSC/:id',
         loadComponent: () =>
-          import('./student-submit/student-submit.component').then(
-            (m) => m.StudentSubmitComponent
+          import('./pages/ssc-form/ssc-form.component').then(
+            (m) => m.SscFormComponent
           ),
-      },
-      {
-      path: 'students/editSSC/:id',
-      loadComponent: () =>
-        import('./pages/ssc-form/ssc-form.component').then(m => m.SscFormComponent),
+        data: { renderMode: 'client' },
       },
       {
         path: 'students/editHSC/:id',
         loadComponent: () =>
-          import('./student-submit/student-submit.component').then(m => m.StudentSubmitComponent),
+          import('./student-submit/student-submit.component').then(
+            (m) => m.StudentSubmitComponent
+          ),
+        data: { renderMode: 'client' },
       },
       {
         path: 'users/edit/:id',
         loadComponent: () =>
-          import('./pages/user-form/user-form.component').then(m => m.UserFormComponent),
-      }
-
+          import('./pages/user-form/user-form.component').then(
+            (m) => m.UserFormComponent
+          ),
+        data: { renderMode: 'client' },
+      },
     ],
   },
 
