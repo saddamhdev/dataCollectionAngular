@@ -1,0 +1,72 @@
+<div class="container mt-2" style="max-width: 1100px; margin: 24px auto;">
+  
+  <!-- Title -->
+  <h4 class="mb-3 fw-bold text-gradient">🛡 Thana Permission</h4>
+
+  <!-- Select User -->
+  <div class="d-flex gap-3 mb-3">
+    <label class="fw-semibold">Select User:</label>
+    <select [(ngModel)]="selectedUser" class="form-select premium-input w-auto">
+      <option [ngValue]="null">-- Choose User --</option>
+      <option *ngFor="let u of users" [ngValue]="u">{{ u.name }}</option>
+    </select>
+  </div>
+
+  <!-- Division → District Dropdowns -->
+  <div class="d-flex gap-3 mb-3">
+    <div>
+      <label class="fw-semibold small">Division:</label>
+      <select [(ngModel)]="selectedDivision" 
+              (change)="loadDistricts()" 
+              class="form-select premium-input w-auto">
+        <option [ngValue]="null">-- Select Division --</option>
+        <option *ngFor="let d of divisions" [ngValue]="d">{{ d }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="fw-semibold small">District:</label>
+      <select [(ngModel)]="selectedDistrict" 
+              (change)="loadThanas()" 
+              class="form-select premium-input w-auto">
+        <option [ngValue]="null">-- Select District --</option>
+        <option *ngFor="let dis of districts" [ngValue]="dis">{{ dis }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Thana Checkboxes -->
+  <div *ngIf="thanas.length > 0" class="shadow-sm p-3 rounded premium-card">
+    <h6 class="fw-bold text-slate mb-2">
+      Thanas in {{ selectedDistrict }} ({{ selectedDivision }})
+    </h6>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let t of thanas">
+        <label class="form-check-label d-flex align-items-center">
+          <input type="checkbox"
+                 class="form-check-input me-2"
+                 [(ngModel)]="t.selected" />
+          {{ t.name }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="mt-3">
+    <button *ngIf="isUpdateMode && pagePermissionService.hasComponent('Permission Menu','Assign Thana Permission','Update')" 
+        class="btn btn-success fw-semibold shadow-sm"
+        (click)="savePermissions()"
+        [disabled]="isSaveDisabled">
+    <i class="bi bi-check-circle me-1"></i>
+    Update Permissions
+</button>
+    <button *ngIf="!isUpdateMode && pagePermissionService.hasComponent('Permission Menu','Assign Thana Permission','Save')" 
+        class="btn btn-success fw-semibold shadow-sm"
+        (click)="savePermissions()"
+        [disabled]="isSaveDisabled">
+    <i class="bi bi-check-circle me-1"></i>
+    Save Permissions
+</button>
+
+</div>

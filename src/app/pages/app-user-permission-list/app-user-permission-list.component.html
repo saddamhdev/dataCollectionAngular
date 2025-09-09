@@ -1,0 +1,51 @@
+<div class="container mx-auto mt-6 px-4">
+  <!-- Title -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-semibold text-yellow-400 flex items-center">
+      📋 <span class="ml-2">User Permissions</span>
+    </h2>
+
+    <!-- Search Box -->
+  <div class="flex justify-end mb-3">
+    <input [(ngModel)]="searchText"
+           type="text"
+           placeholder="🔍 Search..."
+           class="px-3 py-2 border border-slate-600 rounded-md text-sm w-64 bg-slate-900 text-slate-200">
+  </div>
+  </div>
+
+  <!-- Table -->
+  <table class="table-auto w-full text-sm text-slate-200 text-center border border-slate-700 rounded-lg shadow-md">
+    <thead class="bg-slate-800 text-yellow-400 uppercase text-xs tracking-wider">
+      <tr>
+        <th class="border border-slate-700 px-4 py-3">User ID</th>
+        <th class="border border-slate-700 px-4 py-3">User Name</th>
+        <th class="border border-slate-700 px-4 py-3">Division</th>
+        <th class="border border-slate-700 px-4 py-3">District</th>
+        <th class="border border-slate-700 px-4 py-3">Thanas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of userPermissions | filterGlobal: searchText"
+          class="hover:bg-slate-700/40 transition">
+        <td class="border border-slate-700 px-4 py-3 font-mono text-slate-300">{{ u.userId }}</td>
+        <td class="border border-slate-700 px-4 py-3 font-medium">{{ u.userName || '-' }}</td>
+        <td class="border border-slate-700 px-4 py-3">{{ u.division || '-' }}</td>
+        <td class="border border-slate-700 px-4 py-3">{{ u.district || '-' }}</td>
+        <td class="border border-slate-700 px-4 py-3">
+          <ng-container *ngIf="u.thanaNames?.length; else noThana">
+            <div class="flex flex-wrap gap-2 justify-center">
+              <span *ngFor="let thana of u.thanaNames"
+                    class="px-2 py-1 bg-slate-800 text-yellow-400 rounded-full text-xs font-semibold shadow-sm">
+                {{ thana }}
+              </span>
+            </div>
+          </ng-container>
+          <ng-template #noThana>
+            <span class="text-slate-500">-</span>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

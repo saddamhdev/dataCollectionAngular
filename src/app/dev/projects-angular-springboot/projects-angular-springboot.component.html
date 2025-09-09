@@ -1,0 +1,137 @@
+<div class="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-100 px-8 py-16">
+
+  <!-- Section Title -->
+  <div class="text-center mb-12">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-yellow-400 tracking-wide">
+      🎓 Angular + Spring Boot Projects
+    </h2>
+    <p class="mt-3 text-slate-400 text-lg max-w-2xl mx-auto">
+      A showcase of enterprise-grade full-stack projects built with Angular, Spring Boot, and modern databases.
+    </p>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="grid md:grid-cols-2 gap-10">
+
+    <!-- Training App -->
+    <div class="p-6 bg-slate-800 rounded-xl shadow-lg hover:shadow-yellow-400/20 hover:-translate-y-1 transition">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">🎓</span>
+        <h3 class="text-xl font-bold text-yellow-300">Training App</h3>
+      </div>
+      <p class="text-slate-400 text-sm leading-relaxed">
+        Full-stack platform for online training, quizzes, and student feedback, enabling scalable learning management.
+      </p>
+      <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">⚛ Angular</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">☕ Spring Boot</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">🗄️ PostgreSQL</span>
+      </div>
+      <ul class="mt-3 text-xs text-slate-400 space-y-1">
+        <li>✅ 300+ active trainees enrolled</li>
+        <li>✅ Automated quizzes & instant feedback</li>
+        <li>✅ Reduced manual grading by 70%</li>
+      </ul>
+      <button (click)="openDemo('DocUser.mp4')"
+              class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 border border-yellow-400 
+                     text-yellow-400 text-sm font-medium rounded-full 
+                     hover:bg-yellow-400 hover:text-slate-900 transition">
+        🎥 <span>Watch Demo</span>
+      </button>
+    </div>
+
+    <!-- Device Management -->
+    <div class="p-6 bg-slate-800 rounded-xl shadow-lg hover:shadow-yellow-400/20 hover:-translate-y-1 transition">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">💻</span>
+        <h3 class="text-xl font-bold text-yellow-300">Device Management</h3>
+      </div>
+      <p class="text-slate-400 text-sm leading-relaxed">
+        Lifecycle management system covering inventory, warranty tracking, service reports, and accessories management.
+      </p>
+      <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">⚛ Angular</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">☕ Spring Boot</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">🗄️ MySQL</span>
+      </div>
+      <ul class="mt-3 text-xs text-slate-400 space-y-1">
+        <li>✅ 1,000+ devices tracked</li>
+        <li>✅ Automated warranty expiration alerts</li>
+        <li>✅ Improved service turnaround by 40%</li>
+      </ul>
+      <button (click)="openDemo('DocUser.mp4')"
+              class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 border border-yellow-400 
+                     text-yellow-400 text-sm font-medium rounded-full 
+                     hover:bg-yellow-400 hover:text-slate-900 transition">
+        🎥 <span>Watch Demo</span>
+      </button>
+    </div>
+
+    <!-- Attendance Software -->
+    <div class="p-6 bg-slate-800 rounded-xl shadow-lg hover:shadow-yellow-400/20 hover:-translate-y-1 transition">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">📊</span>
+        <h3 class="text-xl font-bold text-yellow-300">Attendance Software</h3>
+      </div>
+      <p class="text-slate-400 text-sm leading-relaxed">
+        Microservices-based attendance tracking platform with Angular front-end, Spring Boot APIs, and MongoDB.
+      </p>
+      <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">⚛ Angular</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">☕ Spring Boot</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">🍃 MongoDB</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">⚡ Microservices</span>
+      </div>
+      <ul class="mt-3 text-xs text-slate-400 space-y-1">
+        <li>✅ Real-time attendance sync across services</li>
+        <li>✅ Scalable microservices architecture</li>
+        <li>✅ Improved reliability with Kafka event-driven flow</li>
+      </ul>
+      <button (click)="openDemo('DocUser.mp4')"
+              class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 border border-yellow-400 
+                     text-yellow-400 text-sm font-medium rounded-full 
+                     hover:bg-yellow-400 hover:text-slate-900 transition">
+        🎥 <span>Watch Demo</span>
+      </button>
+    </div>
+
+    <!-- Data Collection with Dynamic RBAC -->
+    <div class="p-6 bg-slate-800 rounded-xl shadow-lg hover:shadow-yellow-400/20 hover:-translate-y-1 transition">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">🛡️</span>
+        <h3 class="text-xl font-bold text-yellow-300">Data Collection (RBAC)</h3>
+      </div>
+      <p class="text-slate-400 text-sm leading-relaxed">
+        Secure data collection system with Angular front-end and Spring Boot RBAC backend powered by PostgreSQL.
+      </p>
+      <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">⚛ Angular</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">☕ Spring Boot</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">🗄️ PostgreSQL</span>
+        <span class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">🔐 RBAC</span>
+      </div>
+      <ul class="mt-3 text-xs text-slate-400 space-y-1">
+        <li>✅ Dynamic role & permission management</li>
+        <li>✅ Fine-grained access control per module</li>
+        <li>✅ Ensured enterprise-grade security compliance</li>
+      </ul>
+      <button (click)="openDemo('DocUser.mp4')"
+              class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 border border-yellow-400 
+                     text-yellow-400 text-sm font-medium rounded-full 
+                     hover:bg-yellow-400 hover:text-slate-900 transition">
+        🎥 <span>Watch Demo</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Client Value Section -->
+  <div class="text-center mt-16 max-w-3xl mx-auto">
+    <h3 class="text-xl font-bold text-yellow-400 mb-4">Why Clients Hire Me</h3>
+    <p class="text-slate-300 leading-relaxed">
+      I specialize in building <span class="text-yellow-300">enterprise-grade Angular + Spring Boot applications</span>.  
+      My focus is on clean code, scalable architectures, and delivering real business value.  
+      From dashboards to CRMs to automation systems — I’ve built solutions that save time, cut costs, and boost efficiency.
+    </p>
+  </div>
+</div>

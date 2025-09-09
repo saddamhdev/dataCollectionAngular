@@ -1,0 +1,112 @@
+<div id="summary-content" class="container my-3 small-summary">
+  <div class="card shadow-sm">
+    <div class="card-body bg-dark text-white rounded">
+
+      <h2 class="h5 fw-bold text-warning mb-3">🍲 Basa & Office Khabar Management</h2>
+
+      <!-- Office Table -->
+      <h3 class="h6 text-info mb-2">🏢 Office (6 din × 18 jon)-dupur</h3>
+      <table class="table table-bordered table-dark table-sm compact-table mb-3">
+        <thead class="table-secondary">
+          <tr>
+            <th>Day</th>
+            <th>Menu</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let day of officeMenu; let i = index">
+            <td>Day {{ i+1 }}</td>
+            <td>{{ day }}</td>
+            <td>18</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Home Table -->
+      <h3 class="h6 text-info mb-2">🏠 Basa (7 din × 6 jon)-rat</h3>
+      <table class="table table-bordered table-dark table-sm compact-table mb-3">
+        <thead class="table-secondary">
+          <tr>
+            <th>Day</th>
+            <th>Menu</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let day of homeMenu; let i = index">
+            <td>Day {{ i+1 }}</td>
+            <td>{{ day }}</td>
+            <td>6</td>
+          </tr>
+          <tr class="table-info">
+            <td>Friday (Extra Noon)</td>
+            <td>Goru</td>
+            <td>6</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Office Summary -->
+      <h3 class="h6 text-info mb-2">🏢 Office Khabar Summary-dupur</h3>
+      <table class="table table-bordered table-dark table-sm compact-table mb-3">
+        <thead class="table-warning text-dark">
+          <tr>
+            <th>Item</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of officeSummary">
+            <td>{{ item.name }}</td>
+            <td>{{ item.qty | number:'1.1-1' }} {{ item.unit }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Home Summary -->
+      <h3 class="h6 text-info mb-2">🏠 Basa Khabar Summary-rat</h3>
+      <table class="table table-bordered table-dark table-sm compact-table mb-3">
+        <thead class="table-warning text-dark">
+          <tr>
+            <th>Item</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of homeSummary">
+            <td>{{ item.name }}</td>
+            <td>{{ item.qty | number:'1.1-1' }} {{ item.unit }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Grand Total -->
+      <h3 class="h6 text-info mb-2">📊 Grand Total (Office + Basa)-(dupur+rat)</h3>
+      <table class="table table-bordered table-dark table-sm compact-table">
+        <thead class="table-warning text-dark">
+          <tr>
+            <th>Item</th>
+            <th>Total Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of totalSummary">
+            <td>{{ item.name }}</td>
+            <td class="fw-bold text-success">
+              {{ item.qty | number:'1.1-1' }} {{ item.unit }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<!-- Export Button -->
+<div class="text-center my-2">
+  <button (click)="exportAsPDF()" class="btn btn-danger btn-sm shadow-sm">
+    📄 Export as PDF
+  </button>
+</div>

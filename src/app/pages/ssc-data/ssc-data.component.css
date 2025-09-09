@@ -1,0 +1,62 @@
+/* Premium palette */
+.premium-card {
+  background: #1e293b; /* dark navy slate */
+  border: 1px solid #334155;
+}
+
+.premium-input {
+  background: #0f172a;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+}
+.premium-input:focus {
+  border-color: #d4af37; /* gold */
+  box-shadow: 0 0 0 0.25rem rgba(212,175,55,0.35);
+}
+
+.premium-table {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+.premium-table td, .premium-table th {
+  vertical-align: middle;
+  text-align: center;
+}
+.premium-thead {
+  background: linear-gradient(90deg, #0f172a, #1e293b);
+  color: #facc15; /* gold headers */
+  font-size: 0.9rem;
+}
+
+.text-gold { color: #facc15 !important; }
+.text-slate { color: #94a3b8 !important; }
+
+/* Pagination Buttons */
+.premium-btn {
+  background: #1e293b;
+  color: #facc15;
+  border: 1px solid #334155;
+  transition: 0.3s;
+}
+.premium-btn:hover {
+  background: #334155;
+  color: #fff;
+}
+.premium-btn.active {
+  background: #facc15;
+  color: #0f172a;
+  font-weight: bold;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #667EFF, #8B5CF6);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #8B5CF6, #667EFF);
+  color: #fff;
+}
+

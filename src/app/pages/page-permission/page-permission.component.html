@@ -1,0 +1,136 @@
+<div class="max-w-5xl mx-auto bg-slate-900 p-8 rounded-2xl shadow-lg border border-slate-700">
+  <h2 class="text-3xl font-bold text-yellow-400 mb-6 flex items-center gap-2">
+    🛡️ Assign Permissions
+  </h2>
+
+  <!-- Select User -->
+  <div class="mb-6">
+    <label class="block text-sm font-medium text-slate-300 mb-2">Select User</label>
+    <select [(ngModel)]="selectedUserId" 
+            (change)="loadUserPermissions(selectedUserId!)"
+            class="w-full px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 text-slate-200 focus:ring-2 focus:ring-yellow-400">
+      <option [ngValue]="null" disabled>-- Choose a User --</option>
+      <option *ngFor="let u of users" [ngValue]="u.id">{{ u.name }} ({{ u.email }})</option>
+    </select>
+  </div>
+
+  <!-- Success/Error Message -->
+  <div *ngIf="message"
+       class="mb-4 px-4 py-3 rounded-lg font-medium shadow-md"
+       [ngClass]="{
+         'bg-green-600/80 text-white border border-green-400': messageType === 'success',
+         'bg-red-600/80 text-white border border-red-400': messageType === 'error'
+       }">
+    {{ message }}
+  </div>
+
+  <!-- Permissions Tree -->
+  <div *ngIf="tree" class="space-y-4">
+    <div *ngFor="let menu of tree.menus" 
+         class="rounded-lg overflow-hidden border border-slate-700"
+         [ngClass]="{ 'border-yellow-400 bg-slate-800/70': menu.checked || isMenuIndeterminate(menu) }">
+
+      <!-- Menu -->
+      <div class="px-4 py-3 flex items-center justify-between transition cursor-pointer"
+           [ngClass]="{ 'bg-yellow-500 text-slate-900': menu.checked, 'bg-slate-700': !menu.checked }">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox"
+                 [checked]="menu.checked"
+                 [indeterminate]="isMenuIndeterminate(menu)"
+                 (change)="toggleMenu(menu)"
+                 class="w-5 h-5 accent-yellow-400">
+          <span style="margin-left: 5px;" class="text-lg font-semibold">{{ menu.name }}</span>
+        </label>
+      </div>
+
+      <!-- Pages -->
+      <div class="pl-6 py-3 bg-slate-800 space-y-2" *ngFor="let page of menu.pages">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox"
+                 [checked]="page.checked"
+                 [indeterminate]="isPageIndeterminate(page)"
+                 (change)="togglePage(menu, page)"
+                 class="w-4 h-4 accent-yellow-300">
+          <span style="margin-left: 5px;" class="text-slate-200">{{ page.name }}</span>
+        </label>
+
+        <!-- Components -->
+        <div class="pl-6 mt-1 space-y-1" *ngFor="let comp of page.components">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox"
+                   [checked]="comp.checked"
+                   (change)="toggleComponent(menu, page, comp)"
+                   class="w-4 h-4 accent-green-400">
+            <span style="margin-left: 5px;" class="text-slate-300">{{ comp.name }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <button *ngIf="pagePermissionService.hasComponent('Page Permission', 'Assign Permission','Update')" (click)="savePermissions()"
+          class="w-full mt-6 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold py-3 rounded-lg shadow-md transition">
+    <span  *ngIf="hasExistingPermissions ">🔄 Update Permissions</span>
+  </button>
+    <!-- Save Button -->
+  <button *ngIf="pagePermissionService.hasComponent('Page Permission', 'Assign Permission','Save')" (click)="savePermissions()"
+          class="w-full mt-6 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold py-3 rounded-lg shadow-md transition">
+    <span *ngIf="!hasExistingPermissions">💾 Save Permissions</span>
+  </button>
+</div>
+
+<!-- Permissions Table -->
+<div class="max-w-6xl mx-auto mt-10 bg-slate-900 p-6 rounded-2xl shadow-md border border-slate-700" *ngIf="allUserPermissions.length > 0">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xl font-bold text-yellow-400">📋 All Users Permissions</h3>
+    <input [(ngModel)]="searchText"
+           (input)="applyFilter()"
+           type="text"
+           placeholder="🔍 Search..."
+           class="px-4 py-2 border border-slate-600 rounded-lg text-sm w-72 bg-slate-800 text-slate-200 focus:ring-2 focus:ring-yellow-400">
+  </div>
+
+  <div class="overflow-x-auto rounded-lg">
+    <table class="w-full text-sm border-collapse">
+      <thead>
+        <tr class="bg-slate-700 text-yellow-300 text-left">
+          <th class="px-4 py-2">User</th>
+          <th class="px-4 py-2">Menu</th>
+          <th class="px-4 py-2">Page</th>
+          <th class="px-4 py-2">Component</th>
+        </tr>
+      </thead>
+      <tbody>
+  <ng-container *ngFor="let user of filteredUserPermissions">
+    <ng-container *ngFor="let menu of user.menus">
+      <ng-container *ngFor="let page of menu.pages">
+        <tr *ngFor="let comp of page.components" 
+            class="border-b border-slate-700 hover:bg-slate-800/60 transition">
+          <td class="px-4 py-2 font-semibold text-yellow-300">
+            {{ user.userName }} <span class="text-slate-400">({{ user.email }})</span>
+          </td>
+
+          <!-- Menu Column -->
+          <td class="px-4 py-2">
+            {{ menu.checked ? menu.name : '-' }}
+          </td>
+
+          <!-- Page Column -->
+          <td class="px-4 py-2">
+            {{ page.checked ? page.name : '-' }}
+          </td>
+
+          <!-- Component Column -->
+          <td class="px-4 py-2">
+            {{ comp.checked ? comp.name : '-' }}
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</tbody>
+
+    </table>
+  </div>
+</div>

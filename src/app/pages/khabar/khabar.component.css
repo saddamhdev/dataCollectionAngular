@@ -1,0 +1,15 @@
+.small-summary {
+  font-size: 0.8rem; /* ছোট ফন্ট */
+}
+
+.compact-table th,
+.compact-table td {
+  padding: 0.25rem 0.4rem !important; /* cell height কমানো */
+  line-height: 1.1; /* tighter row spacing */
+  text-align: center; /* সব সেন্টার অ্যালাইন */
+  vertical-align: middle; /* উপরে/নিচে মাঝখানে */
+}
+
+h2, h3 {
+  margin-bottom: 0.5rem !important;
+}

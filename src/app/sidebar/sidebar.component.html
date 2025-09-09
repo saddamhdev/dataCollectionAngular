@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Sidebar</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="flex h-screen">
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+    <!-- Sidebar -->
+<aside id="sidebar"
+  class="fixed z-50 leftSidebar  top-0 left-0 h-full w-64  shadow-lg transform -translate-x-full transition-transform duration-300">
+     // here i want add circle image
+      <div class="flex items-center justify-center mt-16">
+        <img src="/sn.jpg" alt="Logo" class="w-16 h-16 rounded-full">
+      </div>
+      <div class="flex items-center justify-center mt-4">
+        <h2 class="text-lg font-semibold">Welcome, Saddam</h2>
+      </div>
+
+      <nav class="p-4 space-y-2">
+       <a href="#" class="sidebar-link block px-4 py-2 rounded text-inherit hover:bg-gray-200 dark:hover:bg-gray-700 ">Home</a>
+      <a href="#" class="sidebar-link block px-4 py-2 rounded text-inherit hover:bg-gray-200 dark:hover:bg-gray-700">Profile</a>
+      <a href="#" class="sidebar-link block px-4 py-2 rounded text-inherit hover:bg-gray-200 dark:hover:bg-gray-700">Settings</a>
+      <a href="#" id="themeToggle" class="sidebar-link block px-4 py-2 rounded text-inherit hover:bg-gray-200 dark:hover:bg-gray-700">Switch to Dark Mode</a>
+      <a href="#" class="sidebar-link block px-4 py-2 rounded text-inherit hover:bg-gray-200 dark:hover:bg-gray-700">Logout</a>
+
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+      <!-- Topbar -->
+     <!-- Topbar -->
+      <header class="shadow p-4 flex items-center justify-between relative z-50">
+       <button id="menuBtn" class="fixed top-4 left-4 z-50  p-2 rounded shadow-lg focus:outline-none">
+          <!-- Hamburger Icon -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <h1 class="ml-12 mt-2 text-xl font-semibold">Device Management</h1>
+      </header>
+
+
+
+      <!-- Content Area -->
+      <main class="p-6">
+        <h2 class="text-2xl font-bold ">Welcome to the Dashboard!</h2>
+        <p class=" mt-2">
+          This is your main content area. You can add your dashboard widgets and information here.
+          
+        </p>
+      </main>
+    </div>
+  </div>
+
+
+
+</body>
+</html>

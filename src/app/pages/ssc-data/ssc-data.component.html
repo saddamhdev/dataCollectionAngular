@@ -1,0 +1,150 @@
+<div class="container mt-2" style="max-width: 1100px; margin: 24px auto;">
+
+  <!-- Title -->
+  <h4 class="mb-3 fw-bold text-gradient">📊 Student Data</h4>
+
+<!-- 🔍 Search + Page size + Export -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-center 
+            mb-4 gap-3 p-3 rounded shadow-sm premium-card">
+
+  <!-- Search Box -->
+  <div class="input-group" style="max-width: 280px;">
+    <span class="input-group-text premium-input border-end-0">
+      <i class="bi bi-search text-gold"></i>
+    </span>
+    <input type="text"
+           [(ngModel)]="searchTerm"
+           placeholder="Search..."
+           class="form-control premium-input border-start-0 shadow-none" />
+  </div>
+
+  <!-- Right Controls -->
+  <div class="d-flex align-items-center gap-3">
+    <!-- Page Size Selector -->
+    <div class="d-flex align-items-center">
+      <label class="me-2 text-slate fw-semibold small">Rows per page:</label>
+      <select [(ngModel)]="pageSize"
+              (ngModelChange)="changePageSize($event)"
+              class="form-select form-select-sm w-auto premium-input shadow-none">
+        <option *ngFor="let size of [1,2,3,4,5,10,20,50]" [value]="size">{{ size }}</option>
+      </select>
+    </div>
+
+    <!-- Export Button -->
+    <button *ngIf="pagePermissionService.hasComponent('Student Menu','SSC Data','Export')"
+        class="btn btn-sm btn-gradient fw-semibold shadow-sm"
+        (click)="exportToCSV()">
+  <i class="bi bi-download me-1"></i> Export
+</button>
+
+  </div>
+</div>
+
+
+  <!-- Status -->
+  <div *ngIf="loading" class="text-muted fst-italic">Loading...</div>
+  <div *ngIf="error" class="text-danger fw-semibold">{{ error }}</div>
+
+  <!-- ✅ Premium Table -->
+  <div class="table-responsive shadow rounded" style="max-height: 500px; overflow:auto;">
+    <table class="table table-hover table-bordered align-middle text-center premium-table">
+      <thead class="premium-thead sticky-top">
+        <tr>
+          <th *ngFor="let col of [
+              {key:'id',label:'ID'},
+              {key:'banglaName',label:'Bangla Name'},
+              {key:'englishName',label:'English Name'},
+              {key:'sscRoll',label:'SSC Roll'},
+              {key:'sscResult',label:'SSC Result'},
+              {key:'sscMark',label:'SSC Marks'},
+              {key:'division',label:'Division'},
+              {key:'district',label:'District'},
+              {key:'upazila',label:'Upazila'},
+              {key:'target',label:'Target'},
+              {key:'mobile',label:'Mobile'},
+              {key:'guardianMobile',label:'Guardian Mobile'},
+              {key:'email',label:'Email'},
+              {key:'comments',label:'Comments'},
+              {key:'createdAt',label:'Year'}
+
+            ]"
+            (click)="sort(col.key)"
+            class="cursor-pointer text-nowrap fw-semibold">
+            {{ col.label }}
+            <span class="ms-1">
+              <span *ngIf="sortColumn === col.key" class="text-gold">
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+              <span *ngIf="sortColumn !== col.key" class="text-slate">↕</span>
+            </span>
+          </th>
+           <!-- Actions column -->
+          <th class="fw-semibold text-nowrap">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of filteredStudents; let i = index" class="align-middle">
+          <td>{{ i + 1 }}</td> <!-- 👈 show row number -->
+          <td>{{ s.banglaName }}</td>
+          <td>{{ s.englishName }}</td>
+          <td>{{ s.sscRoll }}</td>
+          <td>{{ s.sscResult }}</td>
+          <td>{{ s.sscMark }}</td>
+          <td>{{ s.division }}</td>
+          <td>{{ s.district }}</td>
+          <td>{{ s.upazila }}</td>
+          <td>{{ s.target }}</td>
+          <td>{{ s.mobile }}</td>
+          <td>{{ s.guardianMobile }}</td>
+          <td>{{ s.email }}</td>
+          <td>{{ s.comments }}</td>
+          <td>{{ s.createdAt | date:'yyyy' }}</td>
+           <!-- Edit + Delete buttons in the same row -->
+            <td>
+            <div class="d-flex justify-content-center gap-2">
+                <button *ngIf="pagePermissionService.hasComponent('Student Menu','SSC Data','Student Edit')" title="Edit student" class="btn btn-sm btn-outline-primary"
+                        (click)="editStudent(s)">
+                <i class="bi bi-pencil"></i> 
+                </button>
+               <button *ngIf="pagePermissionService.hasComponent('Student Menu','SSC Data','Student Delete')" title="Delete student"
+                        class="px-2 py-1 rounded-md text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition"
+                        (click)="openDeleteModal(s.id)">
+                <i class="bi bi-trash"></i>
+                </button>
+
+
+            </div>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 📄 Pagination -->
+  <div class="d-flex justify-content-between align-items-center mt-3" *ngIf="totalPages > 1">
+    <button class="btn btn-sm btn-outline-light premium-btn" (click)="prevPage()" [disabled]="currentPage===1">
+      Prev
+    </button>
+
+    <div>
+      <button *ngFor="let p of [].constructor(totalPages); let i = index"
+              (click)="goToPage(i+1)"
+              class="btn btn-sm me-1 premium-btn"
+              [class.active]="currentPage===i+1">
+        {{ i+1 }}
+      </button>
+    </div>
+
+    <button class="btn btn-sm btn-outline-light premium-btn" (click)="nextPage()" [disabled]="currentPage===totalPages">
+      Next
+    </button>
+  </div>
+</div>
+<!-- Delete Confirmation Modal (always on top) -->
+<!-- Delete Confirmation Modal -->
+<app-confirm-delete
+  [show]="showDeleteModal"
+  [itemName]="selectedUserName"
+  (cancel)="cancelDelete()"
+  (confirm)="confirmDelete()">
+</app-confirm-delete>

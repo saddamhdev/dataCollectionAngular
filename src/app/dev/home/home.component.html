@@ -1,0 +1,128 @@
+<div class="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-100 font-inter flex flex-col">
+
+  <!-- Hero Section -->
+  <section class="flex-1 flex flex-col items-center justify-center text-center px-6 py-16">
+    <h1 class="text-4xl md:text-6xl font-extrabold drop-shadow-lg">
+      Hi, I'm 
+      <span class="text-yellow-400 animate-pulse">Saddam Hossen</span>
+    </h1>
+    <p class="mt-4 text-lg md:text-xl text-slate-300 max-w-2xl">
+      Java Software Engineer • Full Stack Developer • Cloud & DevOps Enthusiast
+    </p>
+    <div class="mt-6 flex gap-4">
+      <a href="mailto:saddamh.dev@gmail.com"
+         class="px-6 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg shadow hover:bg-yellow-300 transition">
+        📧 Contact Me
+      </a>
+      <a href="assets/Saddam_Hossen_CV.pdf" download
+         class="px-6 py-2 border border-yellow-400 text-yellow-400 rounded-lg shadow hover:bg-yellow-400 hover:text-slate-900 transition">
+        📄 Download CV
+      </a>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="px-8 py-12 bg-slate-900/80 backdrop-blur-lg">
+    <h2 class="text-2xl font-bold text-yellow-400 mb-6 text-center">⚡ Technical Skills</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm text-slate-200 text-center">
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">🌐 Angular / React</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">☕ Java / Spring Boot</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">🗄️ MySQL / PostgreSQL</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">🐳 Docker / Kubernetes</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">☁️ AWS / DigitalOcean</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">🔐 JWT / Security</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">📡 REST / Kafka</div>
+      <div class="p-4 bg-slate-800 rounded-lg shadow hover:shadow-yellow-400/20">🛠️ CI/CD / Jenkins</div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="px-8 py-12">
+    <h2 class="text-2xl font-bold text-yellow-400 mb-6 text-center">🚀 Featured Projects</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Public Project -->
+      <div class="p-6 bg-slate-800 rounded-lg shadow hover:scale-105 transition flex flex-col">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-lg text-yellow-300">📊 Attendance Tracker</h3>
+          <span class="px-2 py-1 bg-green-600 text-white text-xs rounded-full">🟢 Live</span>
+        </div>
+        <p class="mt-2 text-sm text-slate-400 flex-1">Role-based attendance system with JWT-secured APIs and MongoDB.</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="https://attendance.saddamh.dev" target="_blank"
+             class="px-4 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg shadow hover:bg-yellow-300 transition">
+            🌍 Visit Website
+          </a>
+          <button (click)="openDemo('DocUser.mp4')"
+             class="px-4 py-2 border border-yellow-400 text-yellow-400 rounded-lg shadow hover:bg-yellow-400 hover:text-slate-900 transition">
+            🎥 Watch Demo
+          </button>
+        </div>
+      </div>
+
+      <!-- Private Project -->
+      <div class="p-6 bg-slate-800 rounded-lg shadow hover:scale-105 transition flex flex-col">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-lg text-yellow-300">🎓 Training App</h3>
+          <span class="px-2 py-1 bg-yellow-500 text-black text-xs rounded-full">🟡 Demo Only</span>
+        </div>
+        <p class="mt-2 text-sm text-slate-400 flex-1">Angular + Spring Boot platform for online training, quizzes & feedback.</p>
+        <div class="mt-4 flex gap-3">
+          <a href="https://training.saddamh.dev" target="_blank"
+             class="px-4 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg shadow hover:bg-yellow-300 transition">
+            🌍 Visit Website
+          </a>
+          <button (click)="openDemo('DocUser.mp4')"
+             class="px-4 py-2 border border-yellow-400 text-yellow-400 rounded-lg shadow hover:bg-yellow-400 hover:text-slate-900 transition">
+            🎥 Watch Demo
+          </button>
+        </div>
+        <p class="mt-3 text-xs text-slate-500">🔒 Code private (enterprise). Case study available on request.</p>
+      </div>
+
+      <!-- Private Project -->
+      <div class="p-6 bg-slate-800 rounded-lg shadow hover:scale-105 transition flex flex-col">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-lg text-yellow-300">💻 Device Management</h3>
+          <span class="px-2 py-1 bg-gray-600 text-white text-xs rounded-full">🔒 Private</span>
+        </div>
+        <p class="mt-2 text-sm text-slate-400 flex-1">Lifecycle system with modules for inventory, warranty, and service.</p>
+        <div class="mt-4 flex gap-3">
+          <a href="https://devices.saddamh.dev" target="_blank"
+             class="px-4 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg shadow hover:bg-yellow-300 transition">
+            🌍 Visit Website
+          </a>
+          <button (click)="openDemo('DocUser.mp4')"
+             class="px-4 py-2 border border-yellow-400 text-yellow-400 rounded-lg shadow hover:bg-yellow-400 hover:text-slate-900 transition">
+            🎥 Watch Demo
+          </button>
+        </div>
+        <p class="mt-3 text-xs text-slate-500">🔒 Internal project (screenshots only).</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Video Modal -->
+  <div *ngIf="isModalOpen"
+       class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="bg-slate-900 rounded-lg shadow-lg p-4 max-w-3xl w-full relative">
+      <button (click)="closeDemo()"
+              class="absolute top-2 right-2 text-slate-400 hover:text-yellow-400 text-xl">
+        ✖
+      </button>
+      <video [src]="currentVideo" controls autoplay
+             class="w-full h-96 rounded-lg shadow-md"></video>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-800 text-slate-400 py-6 text-center text-sm">
+    <div class="flex justify-center gap-6 mb-3">
+      <a href="https://linkedin.com/in/saddamhdev" target="_blank" class="hover:text-yellow-400 text-xl">🔗</a>
+      <a href="https://github.com/saddamhdev" target="_blank" class="hover:text-yellow-400 text-xl">💻</a>
+      <a href="mailto:saddamh.dev@gmail.com" class="hover:text-yellow-400 text-xl">✉️</a>
+    </div>
+    <p>© {{ currentYear }} Saddam Hossen. All rights reserved.</p>
+  </footer>
+</div>

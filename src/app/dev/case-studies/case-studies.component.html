@@ -1,0 +1,113 @@
+<div class="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-100 font-inter">
+
+  <!-- Header -->
+  <section class="text-center py-16">
+    <h1 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg">
+      📜 <span class="text-yellow-400">Case Studies</span>
+    </h1>
+    <p class="mt-4 text-slate-400 max-w-2xl mx-auto text-lg">
+      In-depth breakdowns of selected projects — challenges, solutions, and impact.
+    </p>
+  </section>
+
+  <!-- Case Study Item -->
+  <section class="px-8 pb-20 space-y-16">
+
+    <!-- Attendance Tracker -->
+    <article class="bg-slate-800 rounded-lg shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-yellow-300">📊 Attendance Tracker</h2>
+      <p class="mt-3 text-slate-400">
+        A role-based attendance management system with secure APIs and cloud deployment.
+      </p>
+
+      <!-- Sections -->
+      <div class="mt-6 space-y-4">
+        <div>
+          <h3 class="font-semibold text-yellow-400">🔍 Problem</h3>
+          <p class="text-slate-300 text-sm">
+            Many companies struggled to track employee attendance securely and needed real-time dashboards.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-yellow-400">⚡ Solution</h3>
+          <p class="text-slate-300 text-sm">
+            I built a Spring Boot backend with JWT authentication, integrated MongoDB for scalability,
+            and a React dashboard for admins & employees.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-yellow-400">🛠️ Tech Stack</h3>
+          <p class="text-slate-300 text-sm">React, Spring Boot, MongoDB, JWT, Docker</p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-yellow-400">📈 Impact</h3>
+          <p class="text-slate-300 text-sm">
+            Reduced manual tracking by 90%, improved accuracy, and enabled remote access for HR managers.
+          </p>
+        </div>
+      </div>
+
+      <!-- Demo -->
+      <div class="mt-6 flex gap-4">
+        <a href="https://attendance-demo.saddamh.dev" target="_blank"
+           class="px-4 py-2 bg-yellow-400 text-slate-900 rounded-lg font-semibold shadow hover:bg-yellow-300 transition">
+          🌐 Live Site
+        </a>
+        <button (click)="openDemo('DocUser.mp4')"
+           class="px-4 py-2 border border-yellow-400 text-yellow-400 rounded-lg shadow hover:bg-yellow-400 hover:text-slate-900 transition">
+          🎥 Watch Demo
+        </button>
+      </div>
+    </article>
+
+    <!-- Training App -->
+    <article class="bg-slate-800 rounded-lg shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-yellow-300">🎓 Training App</h2>
+      <p class="mt-3 text-slate-400">
+        A learning management platform for online training, quizzes, and feedback.
+      </p>
+
+      <div class="mt-6 space-y-4">
+        <div>
+          <h3 class="font-semibold text-yellow-400">🔍 Problem</h3>
+          <p class="text-slate-300 text-sm">
+            Training companies needed a way to host and track online courses with feedback forms.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-yellow-400">⚡ Solution</h3>
+          <p class="text-slate-300 text-sm">
+            Designed Angular + Spring Boot app with PostgreSQL, built quiz & feedback modules, 
+            and integrated JWT security.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-yellow-400">🛠️ Tech Stack</h3>
+          <p class="text-slate-300 text-sm">Angular, Spring Boot, PostgreSQL, JWT</p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-yellow-400">📈 Impact</h3>
+          <p class="text-slate-300 text-sm">
+            Helped client onboard 200+ students remotely in the first month.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-4">
+        <button (click)="openDemo('DocUser.mp4')"
+           class="px-4 py-2 border border-yellow-400 text-yellow-400 rounded-lg shadow hover:bg-yellow-400 hover:text-slate-900 transition">
+          🎥 Watch Demo
+        </button>
+        <p class="text-xs text-slate-500 self-center">🔒 Code private (enterprise)</p>
+      </div>
+    </article>
+
+  </section>
+
+</div>

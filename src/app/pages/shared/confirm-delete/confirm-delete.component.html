@@ -1,0 +1,32 @@
+<!-- Delete Confirmation Modal -->
+<div *ngIf="show"
+     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+  <div class="bg-white rounded-lg shadow-2xl max-w-sm w-full">
+    <!-- Header -->
+    <div class="px-4 py-3 border-b bg-red-600 text-white rounded-t-lg flex justify-between items-center">
+      <h5 class="font-bold flex items-center gap-2">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Confirm Delete
+      </h5>
+      <button (click)="cancel.emit()" class="text-white hover:text-gray-200">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="px-6 py-4 text-center">
+      <p class="font-semibold text-gray-800">Are you sure you want to delete {{ itemName }}?</p>
+      <p class="text-sm text-gray-500 mt-2">This action cannot be undone.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-6 py-3 flex justify-center gap-4 border-t">
+      <button (click)="cancel.emit()"
+              class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-700 font-medium">
+        Cancel
+      </button>
+      <button (click)="confirm.emit()"
+              class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md text-white font-semibold">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

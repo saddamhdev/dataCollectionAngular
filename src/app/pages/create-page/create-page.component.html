@@ -1,0 +1,68 @@
+<div class="max-w-md mx-auto bg-slate-800 p-6 rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold text-yellow-400 mb-4">➕ Create Page</h2>
+
+  <!-- Form -->
+  <form (ngSubmit)="addPage()" class="space-y-4">
+    <div>
+      <label class="block text-sm mb-1">Page Name</label>
+      <input [(ngModel)]="pageName" name="pageName" type="text"
+             class="w-full px-3 py-2 rounded-md bg-slate-700 text-white focus:ring-2 focus:ring-yellow-400"
+             placeholder="Enter page name" required>
+    </div>
+
+    <div>
+      <label class="block text-sm mb-1">Select Menu</label>
+      <select [(ngModel)]="selectedMenuId" name="menuId"
+              class="w-full px-3 py-2 rounded-md bg-slate-700 text-white focus:ring-2 focus:ring-yellow-400"
+              required>
+        <option [ngValue]="null" disabled>Select menu</option>
+        <option *ngFor="let menu of menus" [ngValue]="menu.id">{{ menu.name }}</option>
+      </select>
+    </div>
+
+    <button *ngIf="pagePermissionService.hasComponent('Page Permission', 'Create Page','Add')" type="submit"
+            class="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold py-2 rounded-md transition">
+      Add Page
+    </button>
+  </form>
+</div>
+
+<!-- Page List in Table -->
+<div class="max-w-2xl mx-auto mt-6 bg-slate-800 p-6 rounded-lg shadow-md" *ngIf="pages.length > 0">
+  <h3 class="text-xl font-semibold text-yellow-400 mb-3">📋 Page List</h3>
+
+  <table class="w-full text-sm border border-slate-700 rounded-md overflow-hidden">
+    <thead>
+      <tr class="bg-slate-700 text-yellow-300">
+        <th class="py-2 px-3 text-left">Menu Name</th>
+        <th class="py-2 px-3 text-left">Page Name</th>
+        <th class="py-2 px-3 text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let page of pages">
+        <td>{{ page.menuName }}</td>
+        <td>{{ page.name }}</td>
+        <td class=" py-2 px-3 text-center">
+            <div class="d-flex justify-content-center gap-2">
+               <button *ngIf="pagePermissionService.hasComponent('Page Permission', 'Create Page','Delete')" title="Delete component"
+                        class="px-2 py-1 rounded-md text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition"
+                        (click)="openDeleteModal(page.id)">
+                <i class="bi bi-trash"></i>
+                </button>
+          </div>
+        </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+
+<app-confirm-delete
+  [show]="showDeleteModal"
+  [itemName]="selectedUserName"
+  (cancel)="cancelDelete()"
+  (confirm)="confirmDelete()">
+</app-confirm-delete>

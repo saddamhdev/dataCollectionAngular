@@ -1,0 +1,102 @@
+<div class="max-w-5xl mx-auto bg-slate-800 p-6 rounded-lg shadow-md border border-slate-700">
+  <h2 class="text-xl font-semibold mb-4 text-yellow-400">📋 User List</h2>
+
+  <!-- Global Search -->
+  <div class="mb-4">
+    <input [(ngModel)]="searchText" (input)="applyFilter()"
+           class="w-full md:w-1/3 px-3 py-2 rounded bg-slate-900 border border-slate-600 text-slate-100 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+           placeholder="🔍 Search users... (name, email, type)">
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-slate-300">⏳ Loading users...</div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="bg-red-600 text-white p-3 rounded mb-4">
+    {{ error }}
+  </div>
+
+  <!-- Table -->
+  <table *ngIf="!loading && filteredUsers.length > 0"
+         class="w-full text-sm border-collapse border border-slate-700">
+    <thead class="bg-slate-700 text-yellow-400">
+      <tr>
+        <th class="p-2 border border-slate-600 text-center">#</th>
+
+        <!-- Name -->
+        <th class="p-2 border border-slate-600 cursor-pointer text-center"
+            (click)="sortBy('name')">
+          Name
+          <span>
+            <ng-container *ngIf="sortColumn==='name'">
+              {{ sortDirection==='asc' ? '▲' : '▼' }}
+            </ng-container>
+            <ng-container *ngIf="sortColumn!=='name'">↕</ng-container>
+          </span>
+        </th>
+
+        <!-- Email -->
+        <th class="p-2 border border-slate-600 cursor-pointer text-center"
+            (click)="sortBy('email')">
+          Email
+          <span>
+            <ng-container *ngIf="sortColumn==='email'">
+              {{ sortDirection==='asc' ? '▲' : '▼' }}
+            </ng-container>
+            <ng-container *ngIf="sortColumn!=='email'">↕</ng-container>
+          </span>
+        </th>
+
+        <!-- User Type -->
+        <th class="p-2 border border-slate-600 cursor-pointer text-center"
+            (click)="sortBy('userType')">
+          User Type
+          <span>
+            <ng-container *ngIf="sortColumn==='userType'">
+              {{ sortDirection==='asc' ? '▲' : '▼' }}
+            </ng-container>
+            <ng-container *ngIf="sortColumn!=='userType'">↕</ng-container>
+          </span>
+        </th>
+        <!-- Actions column -->
+          <th class="fw-semibold text-nowrap">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let u of filteredUsers; let i = index" class="hover:bg-slate-700">
+        <td class="p-2 border border-slate-600 text-center">{{ i + 1 }}</td>
+        <td class="p-2 border border-slate-600 text-center">{{ u.name }}</td>
+        <td class="p-2 border border-slate-600 text-center">{{ u.email }}</td>
+        <td class="p-2 border border-slate-600 text-center">{{ u.userType }}</td>
+        <td class="p-2 border border-slate-600 text-center">
+          <div class="d-flex justify-content-center gap-2">
+            <button *ngIf="pagePermissionService.hasComponent('User Menu','List','User Edit')" title="Edit user" class="btn btn-sm btn-outline-primary"
+                    (click)="editUser(u)">
+              <i class="bi bi-pencil"></i> 
+            </button>
+            <button *ngIf="pagePermissionService.hasComponent('User Menu','List','User Delete')" 
+                    title="Delete user"
+                    class="px-2 py-1 rounded-md text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition"
+                    (click)="openDeleteModal(u.id!)">
+              <i class="bi bi-trash"></i>
+            </button>
+
+          </div>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- No users -->
+  <div *ngIf="!loading && filteredUsers.length === 0" class="text-slate-400 mt-3">
+    No users found.
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-confirm-delete
+  [show]="showDeleteModal"
+  [itemName]="selectedUserName"
+  (cancel)="cancelDelete()"
+  (confirm)="confirmDelete()">
+</app-confirm-delete>

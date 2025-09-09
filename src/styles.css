@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@charset "UTF-8";
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@layer theme { /* ... */ }
+@import "tailwindcss";
+/* your styles below */
+
+
+/* Page background */
+body {
+  background-color: #667EFF; /* premium blue body */
+  color: #111827;            /* dark text for contrast */
+  font-family: 'Inter', sans-serif;
+}
+
