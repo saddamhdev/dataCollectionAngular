@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/saddamhdev/JenkinsAngularProject.git'
+                git branch: 'main', url: 'https://github.com/saddamhdev/dataCollectionAngular.git'
             }
         }
 
