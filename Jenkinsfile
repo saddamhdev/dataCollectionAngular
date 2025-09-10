@@ -71,9 +71,25 @@ EOF
                 withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
                     script {
                         def bashCmd = '''#!/bin/bash
-                            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} <<EOF
+                            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} <<'EOF'
                                 echo "🔁 Testing NGINX config..."
-                                nginx -t && systemctl reload nginx
+                                NG_BIN="/www/server/nginx/sbin/nginx"
+                                NG_CONF="/www/server/nginx/conf/nginx.conf"
+                                NG_PID="/www/server/nginx/logs/nginx.pid"
+
+                                sudo "$NG_BIN" -t -c "$NG_CONF"
+
+                                # Ensure PID file exists
+                                if [ ! -s "$NG_PID" ]; then
+                                  MASTER_PID=$(pgrep -o nginx || true)
+                                  if [ -n "$MASTER_PID" ]; then
+                                    echo "$MASTER_PID" | sudo tee "$NG_PID"
+                                  fi
+                                fi
+
+                                echo "🔄 Reloading NGINX..."
+                                sudo "$NG_BIN" -s reload
+                                echo "✅ NGINX reloaded successfully."
 EOF
                         '''
                         writeFile file: 'remote.sh', text: bashCmd
@@ -95,11 +111,26 @@ EOF
 
                 withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
                     def rollbackCmd = '''#!/bin/bash
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} <<EOF
+                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} <<'EOF'
                             echo "⏪ Rolling back to previous deployment..."
                             rm -rf ${DEPLOY_DIR}
                             cp -r ${BACKUP_DIR} ${DEPLOY_DIR}
-                            nginx -t && systemctl reload nginx
+
+                            NG_BIN="/www/server/nginx/sbin/nginx"
+                            NG_CONF="/www/server/nginx/conf/nginx.conf"
+                            NG_PID="/www/server/nginx/logs/nginx.pid"
+
+                            sudo "$NG_BIN" -t -c "$NG_CONF"
+
+                            if [ ! -s "$NG_PID" ]; then
+                              MASTER_PID=$(pgrep -o nginx || true)
+                              if [ -n "$MASTER_PID" ]; then
+                                echo "$MASTER_PID" | sudo tee "$NG_PID"
+                              fi
+                            fi
+
+                            sudo "$NG_BIN" -s reload
+                            echo "✅ Rollback completed & NGINX reloaded."
 EOF
                     '''
                     writeFile file: 'rollback.sh', text: rollbackCmd
