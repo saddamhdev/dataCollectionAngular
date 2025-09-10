@@ -135,7 +135,7 @@ export const routes: Routes = [
       },
 
       // ⚡ Dynamic edit routes marked client-only
-      {
+     /*  {
         path: 'students/editSSC/:id',
         loadComponent: () =>
           import('./pages/ssc-form/ssc-form.component').then(
@@ -158,7 +158,7 @@ export const routes: Routes = [
             (m) => m.UserFormComponent
           ),
         data: { renderMode: 'client' },
-      },
+      }, */
     ],
   },
 
