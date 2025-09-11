@@ -31,7 +31,7 @@ pipeline {
         stage('Build Angular Project') {
             steps {
                 // Skip prerender to avoid build failure
-                bat 'ng build --configuration=production --no-prerender'
+                bat 'ng build --configuration=production'
             }
         }
 
