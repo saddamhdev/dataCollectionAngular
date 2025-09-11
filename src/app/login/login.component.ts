@@ -38,11 +38,13 @@ showPassword: boolean = false;
             this.router.navigate(['/dashboard/home']);  // <-- or whatever your route is
         } 
         else {
-            this.router.navigate(['/']);  // <-- or whatever your route is
+           // this.router.navigate(['/']);  // <-- or whatever your route is
+             this.router.navigate(['/dashboard/home']);  // <-- or whatever your route is
         }
 
       },
       (error) => {
+        
         // Handle failed login
         console.error('Login failed', error);
        // this.router.navigate(['/dashboard']);  // <-- or whatever your route is
