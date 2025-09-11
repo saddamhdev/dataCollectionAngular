@@ -30,7 +30,8 @@ pipeline {
 
         stage('Build Angular Project') {
             steps {
-                bat 'ng build --configuration=production'
+                // Skip prerender to avoid build failure
+                bat 'ng build --configuration=production --no-prerender'
             }
         }
 
@@ -41,8 +42,13 @@ pipeline {
                         def bashCmd = '''#!/bin/bash
                             ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} <<EOF
                                 echo "📦 Backing up current deployment..."
-                                rm -rf ${BACKUP_DIR}
-                                cp -r ${DEPLOY_DIR} ${BACKUP_DIR}
+                                if [ -d "${DEPLOY_DIR}" ]; then
+                                    rm -rf ${BACKUP_DIR}
+                                    cp -r ${DEPLOY_DIR} ${BACKUP_DIR}
+                                    echo "✅ Backup created."
+                                else
+                                    echo "⚠️ No current deployment found, skipping backup."
+                                fi
 EOF
                         '''
                         writeFile file: 'backup.sh', text: bashCmd
@@ -57,7 +63,7 @@ EOF
                 withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
                     script {
                         def deployCmd = """
-                            "C:\\Program Files\\Git\\bin\\bash.exe" -c \
+                            "C:\\Program Files\\Git\\bin\\bash.exe" -c \\
                             "scp -o StrictHostKeyChecking=no -i \\"$SSH_KEY\\" -r ${BUILD_DIR}/* ${PROD_USER}@${PROD_HOST}:${DEPLOY_DIR}"
                         """
                         bat deployCmd
@@ -113,8 +119,13 @@ EOF
                     def rollbackCmd = '''#!/bin/bash
                         ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} <<'EOF'
                             echo "⏪ Rolling back to previous deployment..."
-                            rm -rf ${DEPLOY_DIR}
-                            cp -r ${BACKUP_DIR} ${DEPLOY_DIR}
+                            if [ -d "${BACKUP_DIR}" ]; then
+                                rm -rf ${DEPLOY_DIR}
+                                cp -r ${BACKUP_DIR} ${DEPLOY_DIR}
+                                echo "✅ Rollback restored."
+                            else
+                                echo "⚠️ No backup available to rollback."
+                            fi
 
                             NG_BIN="/www/server/nginx/sbin/nginx"
                             NG_CONF="/www/server/nginx/conf/nginx.conf"
@@ -137,20 +148,8 @@ EOF
                     bat '"C:\\Program Files\\Git\\bin\\bash.exe" rollback.sh'
                 }
 
-                mail to: '01957098631a@gmail.com',
-                    subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: """\
-Hello,
-
-The Jenkins build for job *${env.JOB_NAME}* (build #${env.BUILD_NUMBER}) has **failed**.
-
-Rollback has been triggered. Please review the console output.
-
-🔗 Link: ${env.BUILD_URL}
-
-Regards,  
-Jenkins
-"""
+                // Disabled email step until SMTP is configured
+                echo "📧 Email notification skipped (no SMTP configured)."
             }
         }
     }
