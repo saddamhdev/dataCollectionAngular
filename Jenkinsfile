@@ -62,11 +62,11 @@ EOF
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
                     script {
-                        def deployCmd = """
-                            "C:\\Program Files\\Git\\bin\\bash.exe" -c \\
-                            "scp -o StrictHostKeyChecking=no -i \\"$SSH_KEY\\" -r ${BUILD_DIR}/* ${PROD_USER}@${PROD_HOST}:${DEPLOY_DIR}"
-                        """
-                        bat deployCmd
+                        def deployCmd = '''#!/bin/bash
+                            scp -o StrictHostKeyChecking=no -i "$SSH_KEY" -r dist/my-project/* ${PROD_USER}@${PROD_HOST}:${DEPLOY_DIR}
+                        '''
+                        writeFile file: 'deploy.sh', text: deployCmd
+                        bat '"C:\\Program Files\\Git\\bin\\bash.exe" deploy.sh'
                     }
                 }
             }
