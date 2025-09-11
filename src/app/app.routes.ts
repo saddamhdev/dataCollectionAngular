@@ -10,13 +10,6 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'info',
-    loadComponent: () =>
-      import('./student-submit/student-submit.component').then(
-        (m) => m.StudentSubmitComponent
-      ),
-  },
-  {
     path: 'khabar',
     loadComponent: () =>
       import('./pages/khabar/khabar.component').then((m) => m.KhabarComponent),
