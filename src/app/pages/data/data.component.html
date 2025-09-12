@@ -111,12 +111,12 @@
           <td>{{ s.createdAt | date:'yyyy' }}</td>
           <!-- Edit + Delete buttons in the same row -->
             <td>
-            <div *ngIf="pagePermissionService.hasComponent('Student Menu','List','Student Edit')" class="d-flex justify-content-center gap-2">
+            <div *ngIf="pagePermissionService.hasComponent('Student Menu','HSC Data','Student Edit')" class="d-flex justify-content-center gap-2">
                 <button title="Edit student" class="btn btn-sm btn-outline-primary"
                         (click)="editStudent(s)">
                 <i class="bi bi-pencil"></i> 
                 </button>
-               <button *ngIf="pagePermissionService.hasComponent('Student Menu','List','Student Delete')" title="Delete student"
+               <button *ngIf="pagePermissionService.hasComponent('Student Menu','HSC Data','Student Delete')" title="Delete student"
                         class="px-2 py-1 rounded-md text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition"
                         (click)="openDeleteModal(s.id)">
                 <i class="bi bi-trash"></i>

@@ -82,11 +82,13 @@ export class StudentSubmitComponent implements OnInit, OnDestroy {
       this.locations = data;
       this.divisions = Object.keys(data);
 
-      // ✅ Now safe to load student (locations exist)
-      this.studentId = Number(this.route.snapshot.paramMap.get('id'));
-      if (this.studentId) {
-        this.loadStudent(this.studentId);
-      }
+      // ✅ Check if a student was set in StudentService
+      this.api.getSelectedStudent().subscribe((student) => {
+        if (student) {
+          this.studentId = student.id || null;
+          this.fillForm(student);  // helper method below
+        } 
+      });
     },
     error: (err) => console.error('❌ Failed to load locations:', err)
   });
@@ -101,7 +103,43 @@ export class StudentSubmitComponent implements OnInit, OnDestroy {
     error: (err) => console.error('❌ Failed to load slideshow images:', err)
   });
 }
+private fillForm(data: StudentSubmission) {
+  this.form.patchValue({
+    banglaName: data.banglaName,
+    englishName: data.englishName,
+    highSchool: data.highSchool,
+    sscRoll: data.sscRoll,
+    sscDept: data.sscDept,
+    sscResult: data.sscResult,
+    sscMark: data.sscMark,
+    hscRoll: data.hscRoll,
+    college: data.college,
+    hscDept: data.hscDept,
+    hscResult: data.hscResult,
+    hscMark: data.hscMark,
+    target: data.target,
+    email: data.email,
+    mobile: data.mobile,
+    guardianMobile: data.guardianMobile,
+    comments: data.comments,
+    agree: data.agree
+  });
 
+  // ✅ Location hierarchy
+  if (data.division) {
+    this.form.patchValue({ division: data.division });
+    this.onDivisionChange();
+
+    if (data.district) {
+      this.form.patchValue({ district: data.district });
+      this.onDistrictChange();
+
+      if (data.upazila) {
+        this.form.patchValue({ upazila: data.upazila });
+      }
+    }
+  }
+}
 loadStudent(id: number) {
     this.api.getById(id).subscribe({
       next: (data) => {

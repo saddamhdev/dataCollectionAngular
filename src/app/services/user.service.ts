@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { PagePermissionService } from './page-permission.service';
 import { AuthService} from './auth.service';
@@ -22,6 +22,16 @@ export class UserService {
   private apiUrl = `${this.baseUrl}/api/users`; // Spring Boot backend
 
   constructor(private http: HttpClient, public pagePermissionService: PagePermissionService, public authService: AuthService) {}
+// user.service.ts
+private selectedUser$ = new BehaviorSubject<User | null>(null);
+
+setSelectedUser(user: User) {
+  this.selectedUser$.next(user);
+}
+
+getSelectedUser(): Observable<User | null> {
+  return this.selectedUser$.asObservable();
+}
 
   // Create User
   createUser(user: User): Observable<User> {

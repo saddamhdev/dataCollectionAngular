@@ -17,6 +17,6 @@ export class LocationService {
   constructor(private http: HttpClient, public pagePermissionService: PagePermissionService, public authService: AuthService) {}
 
   getLocations(): Observable<Record<string, Record<string, string[]>>> {
-    return this.http.get<Record<string, Record<string, string[]>>>(this.apiUrl, { headers: this.authService.getAuthHeaders() });
+    return this.http.get<Record<string, Record<string, string[]>>>(this.apiUrl);
   }
 }

@@ -14,14 +14,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-ssc-form',
+  selector: 'app-public-ssc-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './ssc-form.component.html',
-  styleUrl: './ssc-form.component.css'
+  templateUrl: './public-ssc-form.component.html',
+  styleUrl: './public-ssc-form.component.css'
 })
-export class SscFormComponent {
-  notice = signal<string | null>('Please fill all required fields (★).');
+export class PublicSscFormComponent {
+ notice = signal<string | null>('Please fill all required fields (★).');
   noticeType = signal<'info' | 'success' | 'warning' | 'danger'>('info');
 
   sscImages: any[] = [];
@@ -77,24 +77,17 @@ export class SscFormComponent {
   fileError = signal<string | null>(null);
   studentId: number | null = null; // holds edit id if present
 ngOnInit(): void {
-  // Load locations first
+  // 🚫 If server-side prerendering, skip browser logic
+  if (typeof window === 'undefined') return;
+
   this.locationService.getLocations().subscribe({
     next: (data) => {
       this.locations = data;
       this.divisions = Object.keys(data);
-
-      // ✅ Check if a student was set in StudentService
-      this.api.getSelectedStudent().subscribe((student) => {
-        if (student) {
-          this.studentId = student.id || null;
-          this.fillForm(student);  // helper method below
-        } 
-      });
     },
     error: (err) => console.error('❌ Failed to load locations:', err),
   });
 
-  // Slideshow remains the same
   this.imageService.getImages().subscribe({
     next: (res) => {
       const activeImages = res.filter(
@@ -106,43 +99,7 @@ ngOnInit(): void {
     error: (err) => console.error('❌ Failed to load slideshow images:', err),
   });
 }
-private fillForm(data: StudentSubmission) {
-  this.form.patchValue({
-    banglaName: data.banglaName,
-    englishName: data.englishName,
-    highSchool: data.highSchool,
-    sscRoll: data.sscRoll,
-    sscDept: data.sscDept,
-    sscResult: data.sscResult,
-    sscMark: data.sscMark,
-    hscRoll: data.hscRoll,
-    college: data.college,
-    hscDept: data.hscDept,
-    hscResult: data.hscResult,
-    hscMark: data.hscMark,
-    target: data.target,
-    email: data.email,
-    mobile: data.mobile,
-    guardianMobile: data.guardianMobile,
-    comments: data.comments,
-    agree: data.agree,
-  });
 
-  // ✅ Location hierarchy
-  if (data.division) {
-    this.form.patchValue({ division: data.division });
-    this.onDivisionChange();
-
-    if (data.district) {
-      this.form.patchValue({ district: data.district });
-      this.onDistrictChange();
-
-      if (data.upazila) {
-        this.form.patchValue({ upazila: data.upazila });
-      }
-    }
-  }
-}
 
 loadStudent(id: number) {
     this.api.getById(id).subscribe({

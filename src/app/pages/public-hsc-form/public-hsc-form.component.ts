@@ -9,18 +9,15 @@ import { ImageService } from '../../services/image.service';
 import { LocationService } from '../../services/location.service';
 import { Observable } from 'rxjs';
 import { StudentSubmission } from '../../services/student/student.service';  
-import { PagePermissionService } from '../../services/page-permission.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
-
 @Component({
-  selector: 'app-ssc-form',
+  selector: 'app-public-hsc-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './ssc-form.component.html',
-  styleUrl: './ssc-form.component.css'
+  templateUrl: './public-hsc-form.component.html',
+  styleUrl: './public-hsc-form.component.css'
 })
-export class SscFormComponent {
+export class PublicHscFormComponent implements OnInit, OnDestroy {
   notice = signal<string | null>('Please fill all required fields (★).');
   noticeType = signal<'info' | 'success' | 'warning' | 'danger'>('info');
 
@@ -33,9 +30,11 @@ export class SscFormComponent {
   private api = inject(StudentService);
   private imageService = inject(ImageService);
   private locationService = inject(LocationService);
-  private route = inject(ActivatedRoute);
+  studentId: number | null = null; // holds edit id if present
   private router = inject(Router);
-  constructor(private StudentService: StudentService, public pagePermissionService: PagePermissionService) {}
+ private route = inject(ActivatedRoute);
+
+  constructor(private StudentService: StudentService) {}
 
   form: FormGroup = this.fb.group({
     banglaName: ['', [Validators.required, Validators.minLength(3)]],
@@ -45,11 +44,11 @@ export class SscFormComponent {
     sscDept: ['', Validators.required],
     sscResult: ['', Validators.required],
     sscMark: ['', Validators.required],
-    hscRoll: [''],
-    college: [''],
-    hscDept: [''],
-    hscResult: [''],
-    hscMark: [''],
+    hscRoll: ['', Validators.required],
+    college: ['', Validators.required],
+    hscDept: ['', Validators.required],
+    hscResult: ['', Validators.required],
+    hscMark: ['', Validators.required],
     division: ['', Validators.required],
     district: ['', Validators.required],
     upazila: ['', Validators.required],
@@ -75,79 +74,34 @@ export class SscFormComponent {
   upazilas: string[] = [];
 
   fileError = signal<string | null>(null);
-  studentId: number | null = null; // holds edit id if present
-ngOnInit(): void {
+
+  ngOnInit(): void {
+  if (typeof window === 'undefined') return;
   // Load locations first
   this.locationService.getLocations().subscribe({
     next: (data) => {
       this.locations = data;
       this.divisions = Object.keys(data);
-
-      // ✅ Check if a student was set in StudentService
-      this.api.getSelectedStudent().subscribe((student) => {
-        if (student) {
-          this.studentId = student.id || null;
-          this.fillForm(student);  // helper method below
-        } 
-      });
     },
-    error: (err) => console.error('❌ Failed to load locations:', err),
+    error: (err) => console.error('❌ Failed to load locations:', err)
   });
 
   // Slideshow remains the same
   this.imageService.getImages().subscribe({
     next: (res) => {
-      const activeImages = res.filter(
-        (i) => i.batch === 'SSC' && i.status === 'Active'
-      );
+      const activeImages = res.filter(i => i.batch === 'HSC' && i.status === 'Active');
       this.sscImages = activeImages.slice(0, 3);
       this.startSlideshow();
     },
-    error: (err) => console.error('❌ Failed to load slideshow images:', err),
+    error: (err) => console.error('❌ Failed to load slideshow images:', err)
   });
-}
-private fillForm(data: StudentSubmission) {
-  this.form.patchValue({
-    banglaName: data.banglaName,
-    englishName: data.englishName,
-    highSchool: data.highSchool,
-    sscRoll: data.sscRoll,
-    sscDept: data.sscDept,
-    sscResult: data.sscResult,
-    sscMark: data.sscMark,
-    hscRoll: data.hscRoll,
-    college: data.college,
-    hscDept: data.hscDept,
-    hscResult: data.hscResult,
-    hscMark: data.hscMark,
-    target: data.target,
-    email: data.email,
-    mobile: data.mobile,
-    guardianMobile: data.guardianMobile,
-    comments: data.comments,
-    agree: data.agree,
-  });
-
-  // ✅ Location hierarchy
-  if (data.division) {
-    this.form.patchValue({ division: data.division });
-    this.onDivisionChange();
-
-    if (data.district) {
-      this.form.patchValue({ district: data.district });
-      this.onDistrictChange();
-
-      if (data.upazila) {
-        this.form.patchValue({ upazila: data.upazila });
-      }
-    }
-  }
 }
 
 loadStudent(id: number) {
     this.api.getById(id).subscribe({
       next: (data) => {
-       if (data) {
+         console.log('Roll found:', data);
+        if (data) {
           // ✅ Fill simple fields first
           this.form.patchValue({
             banglaName: data.banglaName,
@@ -241,7 +195,7 @@ onDistrictChange() {
     this.file = f;
   }
 
-  async onSubmit() {
+async onSubmit() {
   console.log('Form Data:', this.form.value);
   if (this.form.invalid) {
     this.form.markAllAsTouched();
@@ -290,5 +244,55 @@ onDistrictChange() {
   }
 }
 
+checkSscRoll() {
+  const roll = this.form.get('sscRoll')?.value;
+  if (roll) {
+    this.StudentService.getBySscRoll(roll).subscribe({
+      next: (data) => {
+       console.log('Roll found:', data);
+        if (data) {
+          // ✅ Fill simple fields first
+          this.form.patchValue({
+            banglaName: data.banglaName,
+            englishName: data.englishName,
+            highSchool: data.highSchool,
+            sscDept: data.sscDept,
+            sscResult: data.sscResult,
+            sscMark: data.sscMark,
+            hscRoll: data.hscRoll,
+            college: data.college,
+            hscDept: data.hscDept,
+            hscResult: data.hscResult,
+            hscMark: data.hscMark,
+            target: data.target,
+            email: data.email,
+            mobile: '',
+            guardianMobile: '',
+            comments: data.comments,
+            agree: data.agree
+          });
+
+          // ✅ Handle location fields with dependency
+          if (data.division) {
+            this.form.patchValue({ division: data.division });
+            this.onDivisionChange(); // load districts
+
+            if (data.district) {
+              this.form.patchValue({ district: data.district });
+              this.onDistrictChange(); // load upazilas
+
+              if (data.upazila) {
+                this.form.patchValue({ upazila: data.upazila });
+              }
+            }
+          }
+        }
+      },
+      error: (err) => {
+        console.log('Roll not found or error:', err);
+      }
+    });
+  }
+}
 
 }

@@ -29,23 +29,14 @@ showPassword: boolean = false;
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   constructor(private userService: UserService, public pagePermissionService: PagePermissionService) {}
-ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id')); // 👈 read from URL
-    if (id) {
-      this.userService.getById(id).subscribe({
-        next: (res: User) => {
 
-          this.user = res;  // 👈 populate form
-          this.user.password = ''; // clear password field
-        },
-        error: (err) => {
-          console.error('❌ Error loading user:', err);
-          this.message = '❌ Failed to load user for editing';
-          this.messageType = 'error';
-        }
-      });
-    }
-  }
+ngOnInit(): void {
+  this.userService.getSelectedUser().subscribe((user) => {
+    if (user) {
+      this.user = { ...user, password: '' }; // ✅ clone and clear password
+    } 
+  });
+}
 
   onSubmit() {
     if (this.user.id) {

@@ -145,8 +145,8 @@ selectedUserName = '';
 
 }
 editStudent(student: StudentSubmission) {
- this.router.navigate(['/dashboard/students/editHSC', student.id]);
-
+  this.studentService.setSelectedStudent(student);
+  this.router.navigate(['/dashboard/students/editHSC']); // no id needed
 }
 // Open modal
 openDeleteModal(id: number) {

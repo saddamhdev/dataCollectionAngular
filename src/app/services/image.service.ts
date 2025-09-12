@@ -38,7 +38,7 @@ export class ImageService {
     return this.http.post(`${this.apiUrl}/upload`, formData, { headers: this.getAuthHeaders() });
   }
    getImages(): Observable<ImageRecord[]> {
-    return this.http.get<ImageRecord[]>(`${this.apiUrl}/images`, { headers: this.getAuthHeaders() });
+    return this.http.get<ImageRecord[]>(`${this.apiUrl}/images`);
   }
 updateImage(data: { id: string; batch: string; status: string }) {
   return this.http.post(`${this.apiUrl}/update`, data, { headers: this.authService.getAuthHeaders() });

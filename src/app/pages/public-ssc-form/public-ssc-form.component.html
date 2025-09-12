@@ -1,0 +1,192 @@
+<div class="container" style="max-width: 1100px; margin-bottom: 10px;">
+
+<div class="hero-bg d-flex flex-column align-items-center justify-content-center mb-4">
+  <!-- Slideshow image -->
+  <img *ngIf="sscImages.length > 0"
+       [src]="backendUrl + sscImages[currentIndex]?.filePath"
+       alt="SSC Achiever"
+       class="img-fluid rounded shadow">
+</div>
+
+
+
+
+  <!-- Alerts -->
+  <div class="alert d-flex align-items-center gap-2" *ngIf="notice()" [ngClass]="'alert-' + noticeType()">
+    <div class="flex-grow-1">{{ notice() }}</div>
+    <button type="button" class="btn-close" (click)="notice.set(null)"></button>
+  </div>
+  <div class="col-12">
+    <div class="alert alert-success p-2 mt-3" *ngIf="success()">Submission saved!</div>
+    <div class="alert alert-danger p-2 mt-3" *ngIf="error()">{{ error() }}</div>
+  </div>
+
+  <!-- FORM -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="row g-1">
+
+      <!-- Names -->
+      <div class="col-12 col-lg-6">
+        <label class="form-label">পূর্ণ নাম (বাংলা)</label>
+        <input class="form-control" type="text" formControlName="banglaName" placeholder="জন দো">
+      </div>
+      <div class="col-12 col-lg-6">
+        <label class="form-label">Full Name (English)</label>
+        <input class="form-control" type="text" formControlName="englishName" placeholder="Saddam Hossen">
+      </div>
+
+      <!-- SSC -->
+     <div class="col-12 col-lg-6">
+        <label class="form-label">SSC Roll</label>
+        <input class="form-control"
+              type="text"
+              formControlName="sscRoll"
+              placeholder="SSC Roll"
+               />
+      </div>
+      <div class="col-12 col-lg-6">
+        <label class="form-label">High School / Madrasa</label>
+        <input class="form-control" type="text" formControlName="highSchool">
+      </div>
+      <div class="col-12 col-lg-6">
+        <label class="form-label">SSC Department</label>
+        <select class="form-select" formControlName="sscDept">
+          <option value="" disabled>Select</option>
+          <option>Science</option>
+          <option>Commerce</option>
+          <option>Arts</option>
+          <option>General</option>
+        </select>
+      </div>
+      <div class="col-6 col-lg-3">
+        <label class="form-label">SSC Result</label>
+        <input class="form-control" type="text" formControlName="sscResult" placeholder="GPA 5.00">
+      </div>
+      <div class="col-6 col-lg-3">
+        <label class="form-label">SSC Marks</label>
+        <input class="form-control" type="text" formControlName="sscMark" placeholder="1100">
+      </div>
+
+      <!-- Location -->
+      <div class="col-12 col-lg-4">
+        <label class="form-label">Division</label>
+        <select class="form-select" formControlName="division" (change)="onDivisionChange()">
+          <option value="" disabled>Select Division</option>
+          <option *ngFor="let d of divisions" [value]="d">{{ d }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-lg-4">
+        <label class="form-label">District</label>
+        <select class="form-select" formControlName="district" (change)="onDistrictChange()" [disabled]="!districts.length">
+          <option value="" disabled>Select District</option>
+          <option *ngFor="let dist of districts" [value]="dist">{{ dist }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-lg-4">
+        <label class="form-label">Upazila</label>
+        <select class="form-select" formControlName="upazila" [disabled]="!upazilas.length">
+          <option value="" disabled>Select Upazila</option>
+          <option *ngFor="let u of upazilas" [value]="u">{{ u }}</option>
+        </select>
+      </div>
+
+      <!-- Career -->
+           <!-- Career + Email (same row) -->
+      <div class="col-12 col-lg-6">
+        <label class="form-label">Professional Target</label>
+        <input class="form-control" type="text" formControlName="target" placeholder="Doctor / Engineer / Teacher">
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <label class="form-label">Email</label>
+        <input class="form-control" type="email" formControlName="email" placeholder="name@example.com">
+      </div>
+
+
+      <!-- Contacts -->
+      <div class="col-12 col-lg-6">
+        <label class="form-label">Mobile</label>
+        <input class="form-control" type="tel" formControlName="mobile" placeholder="01XXXXXXXXX">
+      </div>
+      <div class="col-12 col-lg-6">
+        <label class="form-label">Guardian Mobile</label>
+        <input class="form-control" type="tel" formControlName="guardianMobile" placeholder="01XXXXXXXXX">
+      </div>
+     
+
+      <!-- Comments -->
+      <div class="col-12">
+        <label class="form-label">Comments / Suggestions</label>
+        <textarea class="form-control" rows="3" formControlName="comments" placeholder="Your comments..."></textarea>
+      </div>
+
+      <!-- Terms -->
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="agree" formControlName="agree">
+          <label class="form-check-label" for="agree">I confirm the information is accurate.</label>
+        </div>
+      </div>
+
+      <!-- Submit -->
+     <div class="col-12 text-center mt-3">
+      <!-- Create Button (only visible if no ID) -->
+      <button *ngIf="!studentId"
+              class="btn btn-success px-4 py-2 fw-semibold"
+              type="submit"
+              [disabled]="form.invalid || loading()">
+        {{ loading() ? 'Submitting...' : 'Submit' }}
+      </button>
+
+      <!-- Update Button (only visible if editing) -->
+      <button *ngIf="studentId"
+              class="btn btn-warning px-4 py-2 fw-semibold"
+              type="submit"
+              [disabled]="form.invalid || loading()">
+        {{ loading() ? 'Updating...' : 'Update' }}
+      </button>
+    </div>
+
+     <!--  <p class="text-danger">Form valid? {{ form.valid }}</p>
+      <p>Errors:</p>
+      <ul>
+        <li *ngFor="let c of form.controls | keyvalue">
+          {{ c.key }} → {{ c.value.errors | json }}
+        </li>
+      </ul> -->
+
+<!-- Footer -->
+<div class="col-12 mt-5">
+  <footer class="border-top pt-2 pb-0 small">
+
+    <!-- Centered Row -->
+    <div class="d-flex justify-content-center align-items-center gap-2 ">
+      <!-- Logo -->
+      <div>
+        <img src="/logon.png" alt="Logo"
+             style="max-width: 50px; height: auto;"
+             class="img-fluid">
+      </div>
+
+      <!-- Organization Info -->
+      <div class="text-center pt-1">
+        <p class="fw-semibold text-dark mb-1">
+          Bangladesh Islami Chatro Shibir
+        </p>
+        <a href="https://shibir.org.bd/" target="_blank" rel="noopener noreferrer"
+           class="text-primary fw-bold text-decoration-none">
+          www.shibir.org.bd
+        </a>
+      </div>
+    </div>
+
+    
+  </footer>
+</div>
+
+
+
+
+    </div>
+  </form>
+</div>

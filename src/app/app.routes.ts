@@ -128,30 +128,29 @@ export const routes: Routes = [
       },
 
       // ⚡ Dynamic edit routes marked client-only
-     /*  {
-        path: 'students/editSSC/:id',
+       {
+        path: 'students/editSSC',
         loadComponent: () =>
           import('./pages/ssc-form/ssc-form.component').then(
             (m) => m.SscFormComponent
           ),
-        data: { renderMode: 'client' },
       },
+      
       {
-        path: 'students/editHSC/:id',
+        path: 'students/editHSC',
         loadComponent: () =>
           import('./student-submit/student-submit.component').then(
             (m) => m.StudentSubmitComponent
           ),
-        data: { renderMode: 'client' },
       },
+      
       {
-        path: 'users/edit/:id',
+        path: 'users/edit',
         loadComponent: () =>
           import('./pages/user-form/user-form.component').then(
             (m) => m.UserFormComponent
           ),
-        data: { renderMode: 'client' },
-      }, */
+      }, 
     ],
   },
 
@@ -199,6 +198,20 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./dev/projects-java/projects-java.component').then(
         (m) => m.ProjectsJavaComponent
+      ),
+  },
+  {
+    path:'sscform',
+    loadComponent: () =>
+      import('./pages/public-ssc-form/public-ssc-form.component').then(
+        (m) => m.PublicSscFormComponent
+      ),
+  },
+  {
+    path: 'hscform',
+    loadComponent: () =>
+      import('./pages/public-hsc-form/public-hsc-form.component').then(
+        (m) => m.PublicHscFormComponent
       ),
   },
 

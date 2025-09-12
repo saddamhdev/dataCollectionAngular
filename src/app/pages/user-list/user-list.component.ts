@@ -83,9 +83,12 @@ selectedUserName = '';
     });
   }
 
-  editUser(user: User) {
-    this.router.navigate(['/dashboard/users/edit', user.id]);
-  }
+ // user-list.component.ts
+editUser(user: User) {
+  this.userService.setSelectedUser(user);
+  this.router.navigate(['/dashboard/users/edit']);
+}
+
 
 
   openDeleteModal(id: number) {

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth.service';
 
@@ -45,6 +45,7 @@ export interface PagedResponse<T> {
 export class StudentService {
   private http = inject(HttpClient);
   private baseUrl = environment.baseUrl;
+  private selectedStudent$ = new BehaviorSubject<StudentSubmission | null>(null);
    constructor(private authService: AuthService) {}
   /**
    * Submit a student form (with or without file)
@@ -122,4 +123,17 @@ updateStudent(id: number, student: any): Observable<StudentSubmission> {
     { headers: this.authService.getAuthHeaders() }
   );
  }
+
+ // ✅ Shared State
+  setSelectedStudent(student: StudentSubmission) {
+    this.selectedStudent$.next(student);
+  }
+
+  getSelectedStudent(): Observable<StudentSubmission | null> {
+    return this.selectedStudent$.asObservable();
+  }
+
+  clearSelectedStudent() {
+    this.selectedStudent$.next(null);
+  }
 }
