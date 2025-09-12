@@ -54,14 +54,14 @@
 
   <!-- Save Button -->
   <div class="mt-3">
-    <button *ngIf="isUpdateMode && pagePermissionService.hasComponent('Permission Menu','Assign Thana Permission','Update')" 
+    <button *ngIf="isUpdateMode && pagePermissionService.hasComponent('Thana Permission','Assign Thana Permission','Update')" 
         class="btn btn-success fw-semibold shadow-sm"
         (click)="savePermissions()"
         [disabled]="isSaveDisabled">
     <i class="bi bi-check-circle me-1"></i>
     Update Permissions
 </button>
-    <button *ngIf="!isUpdateMode && pagePermissionService.hasComponent('Permission Menu','Assign Thana Permission','Save')" 
+    <button *ngIf="!isUpdateMode && pagePermissionService.hasComponent('Thana Permission','Assign Thana Permission','Save')" 
         class="btn btn-success fw-semibold shadow-sm"
         (click)="savePermissions()"
         [disabled]="isSaveDisabled">
