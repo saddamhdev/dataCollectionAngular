@@ -5,192 +5,178 @@
     [class.w-64]="isOpen"
     [class.w-20]="!isOpen">
 
-<!-- Header / Avatar -->
-<div class="flex flex-col items-center justify-center h-32 px-4 border-b border-slate-700  mt-4">
-  <img src="/sn.jpg" alt="Logo"
-       class="rounded-full shadow-lg ring-2 ring-yellow-400/60 transition-all duration-300 mb-2"
-       [class.w-16]="isOpen" [class.h-16]="isOpen"
-       [class.w-10]="!isOpen" [class.h-10]="!isOpen">
+    <!-- Header / Avatar -->
+    <div class="flex flex-col items-center justify-center h-28 px-4 border-b border-slate-700">
+      <img src="/sn.jpg" alt="Logo"
+           class="rounded-full shadow-lg ring-2 ring-yellow-400/60 transition-all duration-300 mb-2"
+           [class.w-16]="isOpen" [class.h-16]="isOpen"
+           [class.w-10]="!isOpen" [class.h-10]="!isOpen">
 
-  <div *ngIf="isOpen" class="text-center">
-    <h4 class="font-semibold text-lg text-yellow-400">Saddam</h4>
-    <p class="text-xs text-slate-400">Dashboard</p>
-  </div>
-</div>
-
-
+      <div *ngIf="isOpen" class="text-center">
+        <h4 class="font-semibold text-lg text-yellow-400">Saddam</h4>
+        <p class="text-xs text-slate-400">Dashboard</p>
+      </div>
+    </div>
 
     <!-- Navigation -->
-<nav class="flex-1 px-2 py-4 space-y-1">
-  <!-- Home Menu -->
-<div>
-  <a routerLink="/dashboard/home" 
-     routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-     class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-    <span class="text-lg">🏠</span>
-    <span class="ml-2" *ngIf="isOpen">Home</span>
-  </a>
-</div>
-
-
-  <!-- Student Menu -->
-
-<div *ngIf="pagePermissionService.hasMenu('Student Menu')">
-    <button (click)="toggleMenu('student')"
-            class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">🎓</span>
-      <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Student Menu</span>
-      <span *ngIf="isOpen">{{ openMenu === 'student' ? '▼' : '▶' }}</span>
-    </button>
-    <div *ngIf="openMenu === 'student'" class="ml-8 space-y-1 mt-1">
-      <a  *ngIf="pagePermissionService.hasPage('Student Menu', 'SSC FORM')" routerLink="/dashboard/sscForm" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">🧑‍🎓</span>
-        <span class="ml-2" *ngIf="isOpen">SSC Form</span>
+    <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+      <!-- Home -->
+      <a routerLink="/dashboard/home"
+         routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+        <span class="text-lg">🏠</span>
+        <span class="ml-2" *ngIf="isOpen">Home</span>
       </a>
-      <a *ngIf="pagePermissionService.hasPage('Student Menu', 'SSC Data')" routerLink="/dashboard/sscData" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">📊</span>
-        <span class="ml-2" *ngIf="isOpen">SSC Data</span>
-      </a>
-       <a  *ngIf="pagePermissionService.hasPage('Student Menu', 'HSC FORM')" routerLink="/dashboard/hscForm" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">🧑‍🎓</span>
-        <span class="ml-2" *ngIf="isOpen">HSC Form</span>
-      </a>
-      <a *ngIf="pagePermissionService.hasPage('Student Menu', 'HSC Data')" routerLink="/dashboard/data" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">📊</span>
-        <span class="ml-2" *ngIf="isOpen">HSC Data</span>
-      </a>
-    </div>
-  </div>
 
-  <!-- User Menu -->
-<div *ngIf="pagePermissionService.hasMenu('User Menu')">
-      <button (click)="toggleMenu('user')"
-            class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">👤</span>
-      <span class="ml-2 flex-1 text-left" *ngIf="isOpen">User Menu</span>
-      <span *ngIf="isOpen">{{ openMenu === 'user' ? '▼' : '▶' }}</span>
-    </button>
-    <div *ngIf="openMenu === 'user'" class="ml-8 space-y-1 mt-1">
-      <a *ngIf="pagePermissionService.hasPage('User Menu', 'Form')" routerLink="/dashboard/userForm" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">📝</span>
-        <span class="ml-2" *ngIf="isOpen">User Form</span>
-      </a>
-      <a *ngIf="pagePermissionService.hasPage('User Menu', 'List')" routerLink="/dashboard/userList" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">👥</span>
-        <span class="ml-2" *ngIf="isOpen">User List</span>
-      </a>
-    </div>
-  </div>
+      <!-- Student Menu -->
+      <div *ngIf="pagePermissionService.hasMenu('Student Menu')">
+        <button (click)="toggleMenu('student')"
+                class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+          <span class="text-lg">🎓</span>
+          <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Student Menu</span>
+          <span *ngIf="isOpen">{{ openMenu === 'student' ? '▼' : '▶' }}</span>
+        </button>
+        <div *ngIf="openMenu === 'student'" class="ml-6 mt-1 space-y-1">
+          <a *ngIf="pagePermissionService.hasPage('Student Menu','SSC FORM')"
+             routerLink="/dashboard/sscForm" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            🧑‍🎓 <span class="ml-2" *ngIf="isOpen">SSC Form</span>
+          </a>
+          <a *ngIf="pagePermissionService.hasPage('Student Menu','SSC Data')"
+             routerLink="/dashboard/sscData" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📊 <span class="ml-2" *ngIf="isOpen">SSC Data</span>
+          </a>
+          <a *ngIf="pagePermissionService.hasPage('Student Menu','HSC FORM')"
+             routerLink="/dashboard/hscForm" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            🧑‍🎓 <span class="ml-2" *ngIf="isOpen">HSC Form</span>
+          </a>
+          <a *ngIf="pagePermissionService.hasPage('Student Menu','HSC Data')"
+             routerLink="/dashboard/data" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📊 <span class="ml-2" *ngIf="isOpen">HSC Data</span>
+          </a>
+        </div>
+      </div>
 
-  <!-- Permission Menu -->
-<div *ngIf="pagePermissionService.hasMenu('Thana Permission')">
-      <button (click)="toggleMenu('permission')"
-            class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">🛡️</span>
-      <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Thana Permission</span>
-      <span *ngIf="isOpen">{{ openMenu === 'permission' ? '▼' : '▶' }}</span>
-    </button>
-    <div *ngIf="openMenu === 'permission'" class="ml-8 space-y-1 mt-1">
-      <a  *ngIf="pagePermissionService.hasPage('Thana Permission','Assign Thana Permission')" routerLink="/dashboard/thanaPermission" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">🛡️</span>
-        <span class="ml-2" *ngIf="isOpen">Assign Thana Permission</span>
-      </a>
-      <a *ngIf="pagePermissionService.hasPage('Thana Permission','User Thana Permission List')" routerLink="/dashboard/userPermissions" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">📜</span>
-        <span class="ml-2" *ngIf="isOpen">User Thana Permissions List</span>
-      </a>
-    </div>
-  </div>
+      <!-- User Menu -->
+      <div *ngIf="pagePermissionService.hasMenu('User Menu')">
+        <button (click)="toggleMenu('user')"
+                class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+          <span class="text-lg">👤</span>
+          <span class="ml-2 flex-1 text-left" *ngIf="isOpen">User Menu</span>
+          <span *ngIf="isOpen">{{ openMenu === 'user' ? '▼' : '▶' }}</span>
+        </button>
+        <div *ngIf="openMenu === 'user'" class="ml-6 mt-1 space-y-1">
+          <a *ngIf="pagePermissionService.hasPage('User Menu','Form')"
+             routerLink="/dashboard/userForm" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📝 <span class="ml-2" *ngIf="isOpen">User Form</span>
+          </a>
+          <a *ngIf="pagePermissionService.hasPage('User Menu','List')"
+             routerLink="/dashboard/userList" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            👥 <span class="ml-2" *ngIf="isOpen">User List</span>
+          </a>
+        </div>
+      </div>
 
-  <!-- Me Page Menu -->
-<div *ngIf="pagePermissionService.hasMenu('Page Permission')">
-    <button (click)="toggleMenu('me')"
-          class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-    <span class="text-lg">📘</span>
-    <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Page Permission</span>
-    <span *ngIf="isOpen">{{ openMenu === 'me' ? '▼' : '▶' }}</span>
-  </button>
-  <div *ngIf="openMenu === 'me'" class="ml-8 space-y-1 mt-1">
-    <a *ngIf="pagePermissionService.hasPage('Page Permission','Create Menu')" routerLink="/dashboard/createMenu" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-       class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">📑</span>
-      <span class="ml-2" *ngIf="isOpen">Create Menu</span>
-    </a>
-    <a *ngIf="pagePermissionService.hasPage('Page Permission','Create Page')" routerLink="/dashboard/createPage" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-       class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">📄</span>
-      <span class="ml-2" *ngIf="isOpen">Create Page</span>
-    </a>
-    <a *ngIf="pagePermissionService.hasPage('Page Permission','Create Component')" routerLink="/dashboard/createComponent" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-       class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">⚙️</span>
-      <span class="ml-2" *ngIf="isOpen">Create Component</span>
-    </a>
-    <a *ngIf="pagePermissionService.hasPage('Page Permission','Assign Permission')" routerLink="/dashboard/pagePermission" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-       class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">🔐</span>
-      <span class="ml-2" *ngIf="isOpen">Assign Permission</span>
-    </a>
-  </div>
-</div>
+      <!-- Permission Menu -->
+      <div *ngIf="pagePermissionService.hasMenu('Thana Permission')">
+        <button (click)="toggleMenu('permission')"
+                class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+          <span class="text-lg">🛡️</span>
+          <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Thana Permission</span>
+          <span *ngIf="isOpen">{{ openMenu === 'permission' ? '▼' : '▶' }}</span>
+        </button>
+        <div *ngIf="openMenu === 'permission'" class="ml-6 mt-1 space-y-1">
+          <a *ngIf="pagePermissionService.hasPage('Thana Permission','Assign Thana Permission')"
+             routerLink="/dashboard/thanaPermission" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            🛡️ <span class="ml-2" *ngIf="isOpen">Assign Thana Permission</span>
+          </a>
+          <a *ngIf="pagePermissionService.hasPage('Thana Permission','User Thana Permission List')"
+             routerLink="/dashboard/userPermissions" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📜 <span class="ml-2" *ngIf="isOpen">User Thana Permissions List</span>
+          </a>
+        </div>
+      </div>
 
+      <!-- Page Permission Menu -->
+      <div *ngIf="pagePermissionService.hasMenu('Page Permission')">
+        <button (click)="toggleMenu('me')"
+                class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+          <span class="text-lg">📘</span>
+          <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Page Permission</span>
+          <span *ngIf="isOpen">{{ openMenu === 'me' ? '▼' : '▶' }}</span>
+        </button>
+        <div *ngIf="openMenu === 'me'" class="ml-6 mt-1 space-y-1">
+          <a routerLink="/dashboard/createMenu"
+             *ngIf="pagePermissionService.hasPage('Page Permission','Create Menu')"
+             routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📑 <span class="ml-2" *ngIf="isOpen">Create Menu</span>
+          </a>
+          <a routerLink="/dashboard/createPage"
+             *ngIf="pagePermissionService.hasPage('Page Permission','Create Page')"
+             routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📄 <span class="ml-2" *ngIf="isOpen">Create Page</span>
+          </a>
+          <a routerLink="/dashboard/createComponent"
+             *ngIf="pagePermissionService.hasPage('Page Permission','Create Component')"
+             routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            ⚙️ <span class="ml-2" *ngIf="isOpen">Create Component</span>
+          </a>
+          <a routerLink="/dashboard/pagePermission"
+             *ngIf="pagePermissionService.hasPage('Page Permission','Assign Permission')"
+             routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            🔐 <span class="ml-2" *ngIf="isOpen">Assign Permission</span>
+          </a>
+        </div>
+      </div>
 
-  <!-- Image Menu -->
-<div *ngIf="pagePermissionService.hasMenu('Image Menu')">
-      <button (click)="toggleMenu('image')"
-            class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-      <span class="text-lg">🖼️</span>
-      <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Image Menu</span>
-      <span *ngIf="isOpen">{{ openMenu === 'image' ? '▼' : '▶' }}</span>
-    </button>
-    <div *ngIf="openMenu === 'image'" class="ml-8 space-y-1 mt-1">
-      <a *ngIf="pagePermissionService.hasPage('Image Menu','Upload Image')" routerLink="/dashboard/uploadImage" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">📤</span>
-        <span class="ml-2" *ngIf="isOpen">Upload Image</span>
-      </a>
-      <a *ngIf="pagePermissionService.hasPage('Image Menu','Image List')" routerLink="/dashboard/imageList" routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
-         class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition no-underline">
-        <span class="text-lg">🖼️</span>
-        <span class="ml-2" *ngIf="isOpen">Image List</span>
-      </a>
-    </div>
-  </div>
+      <!-- Image Menu -->
+      <div *ngIf="pagePermissionService.hasMenu('Image Menu')">
+        <button (click)="toggleMenu('image')"
+                class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+          <span class="text-lg">🖼️</span>
+          <span class="ml-2 flex-1 text-left" *ngIf="isOpen">Image Menu</span>
+          <span *ngIf="isOpen">{{ openMenu === 'image' ? '▼' : '▶' }}</span>
+        </button>
+        <div *ngIf="openMenu === 'image'" class="ml-6 mt-1 space-y-1">
+          <a routerLink="/dashboard/uploadImage"
+             *ngIf="pagePermissionService.hasPage('Image Menu','Upload Image')"
+             routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            📤 <span class="ml-2" *ngIf="isOpen">Upload Image</span>
+          </a>
+          <a routerLink="/dashboard/imageList"
+             *ngIf="pagePermissionService.hasPage('Image Menu','Image List')"
+             routerLinkActive="bg-slate-700 text-yellow-400 font-medium"
+             class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-slate-700 transition">
+            🖼️ <span class="ml-2" *ngIf="isOpen">Image List</span>
+          </a>
+        </div>
+      </div>
 
-  <!-- 🔹 Logout Button at Bottom -->
-  <div class="mt-auto px-2 py-4 border-t border-slate-700">
-  <button (click)="logout()"
-    class="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-red-600/20 transition no-underline text-red-400 font-semibold">
-    
-    <!-- Heroicon: Logout -->
-    <svg xmlns="http://www.w3.org/2000/svg" 
-         class="h-9 w-9 text-red-400" 
-         fill="none" 
-         viewBox="0 0 24 24" 
-         stroke="currentColor" 
-         stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" 
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H6a2 2 0 
-               01-2-2V7a2 2 0 012-2h5a2 2 0 012 2v1" />
-    </svg>
-
-    <span class="ml-2" *ngIf="isOpen">Logout</span>
-  </button>
-</div>
-
-
-</nav>
-
-
-
+      <!-- Logout -->
+      <button (click)="logout()"
+              class="flex items-center w-full mt-4 px-3 py-2 text-sm rounded-md hover:bg-red-600/20 transition text-red-400 font-semibold">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-6 w-6 text-red-400" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H6a2 2 0 
+                   01-2-2V7a2 2 0 012-2h5a2 2 0 012 2v1" />
+        </svg>
+        <span class="ml-2" *ngIf="isOpen">Logout</span>
+      </button>
+    </nav>
   </aside>
 
   <!-- Main Content -->
@@ -211,7 +197,6 @@
                   d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-
         <h4 class="text-lg font-semibold text-yellow-400">📂 Data Collection</h4>
       </div>
     </header>
