@@ -5,6 +5,7 @@ import { ImageService } from '../../services/image.service';
 import { FilterByBatchPipe } from '../../pipes/filter-by-batch.pipe';
 import { PagePermissionService } from '../../services/page-permission.service';
 import { ConfirmDeleteComponent } from '../shared/confirm-delete/confirm-delete.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-image-list',
@@ -20,7 +21,7 @@ export class ImageListComponent implements OnInit {
 
   loading = true;
   error = '';
-  backendUrl = 'http://localhost:8080'; // ⚡ change for AWS
+  backendUrl = environment.baseUrl;
 
   // Tabs
   activeTab: 'SSC' | 'HSC' = 'SSC';
