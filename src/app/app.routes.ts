@@ -214,6 +214,27 @@ export const routes: Routes = [
         (m) => m.PublicHscFormComponent
       ),
   },
+  {
+    path: 'dev/project-form',
+    loadComponent: () =>
+      import('./dev/project-form/project-form.component').then(
+        (m) => m.ProjectFormComponent
+      ),
+  },
+  {
+    path: 'dev/project-list',
+    loadComponent: () =>
+      import('./dev/project-list/project-list.component').then(
+        (m) => m.ProjectListComponent
+      ),
+  },
+  {
+    path: 'dev/project-detail/:title',
+    loadComponent: () =>
+      import('./dev/project-detail/project-detail.component').then(
+        (m) => m.ProjectDetailComponent
+      ),
+  },
 
   // Wildcard must be last
   {

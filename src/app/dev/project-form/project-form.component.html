@@ -1,0 +1,122 @@
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()" 
+      class="max-w-2xl mx-auto p-8 bg-slate-900 rounded-2xl shadow-lg text-slate-100 space-y-6">
+
+  <!-- Title -->
+  <div>
+    <label class="block text-sm font-semibold text-slate-300 mb-2">Project Title</label>
+    <input formControlName="title" placeholder="e.g. Training App"
+           class="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 
+                  focus:outline-none focus:ring-2 focus:ring-yellow-400 transition" />
+  </div>
+
+  <!-- Icon -->
+  <div>
+    <label class="block text-sm font-semibold text-slate-300 mb-2">Project Icon</label>
+    <input formControlName="icon" placeholder="e.g. 🎓"
+           class="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 
+                  focus:outline-none focus:ring-2 focus:ring-yellow-400 transition" />
+  </div>
+
+  <!-- Description -->
+  <div>
+    <label class="block text-sm font-semibold text-slate-300 mb-2">Description</label>
+    <textarea formControlName="description" rows="3"
+              placeholder="Brief project description..."
+              class="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 
+                     focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"></textarea>
+  </div>
+
+  <!-- Technologies -->
+  <div>
+    <label class="block text-sm font-semibold text-slate-300 mb-2">Technologies</label>
+    <div class="flex gap-2">
+      <input #techInput placeholder="Add technology (e.g. ⚛ Angular)" 
+             class="flex-1 p-3 rounded-lg bg-slate-800 border border-slate-700 
+                    focus:outline-none focus:ring-2 focus:ring-yellow-400 transition" />
+      <button type="button" 
+              (click)="addTechnology(techInput.value); techInput.value=''"
+              class="px-4 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg 
+                     hover:bg-yellow-300 transition">Add</button>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <span *ngFor="let t of technologies.controls; let i = index"
+            class="bg-slate-700 text-yellow-300 px-3 py-1 rounded-full text-sm flex items-center gap-2 shadow-sm">
+        {{t.value}}
+        <button type="button" (click)="removeTechnology(i)" 
+                class="text-red-400 hover:text-red-300">✖</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div>
+    <label class="block text-sm font-semibold text-slate-300 mb-2">Features</label>
+    <div class="flex gap-2">
+      <input #featureInput placeholder="Add feature (e.g. Automated quizzes)" 
+             class="flex-1 p-3 rounded-lg bg-slate-800 border border-slate-700 
+                    focus:outline-none focus:ring-2 focus:ring-yellow-400 transition" />
+      <button type="button" 
+              (click)="addFeature(featureInput.value); featureInput.value=''"
+              class="px-4 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg 
+                     hover:bg-yellow-300 transition">Add</button>
+    </div>
+    <ul class="mt-3 space-y-1 text-sm text-slate-400">
+      <li *ngFor="let f of features.controls; let i = index" 
+          class="flex items-center gap-2">
+        ✅ {{f.value}}
+        <button type="button" (click)="removeFeature(i)" 
+                class="text-red-400 hover:text-red-300 text-xs">✖</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Demo Links -->
+<div>
+  <label class="block text-sm font-semibold text-slate-300 mb-2">Demo Links</label>
+
+  <div class="flex gap-2 mb-2">
+    <select #demoType 
+            class="p-3 rounded-lg bg-slate-800 border border-slate-700 text-slate-100">
+      <option value="GitHub">GitHub</option>
+      <option value="YouTube">YouTube</option>
+      <option value="Live Site">Live Site</option>
+      <option value="Case Studies">Case Studies</option>
+    </select>
+
+    <input #demoUrl placeholder="Enter URL" 
+           class="flex-1 p-3 rounded-lg bg-slate-800 border border-slate-700 
+                  focus:outline-none focus:ring-2 focus:ring-yellow-400 transition" />
+
+    <button type="button" 
+            (click)="addDemoLink(demoType.value, demoUrl.value); demoUrl.value=''"
+            class="px-4 py-2 bg-yellow-400 text-slate-900 font-semibold rounded-lg 
+                   hover:bg-yellow-300 transition">
+      Add
+    </button>
+  </div>
+
+  <ul class="mt-3 space-y-2">
+    <li *ngFor="let link of demoLinks.controls; let i = index"
+        class="flex items-center justify-between bg-slate-800 p-2 rounded-lg">
+      <span class="text-sm text-slate-200">
+        🔗 <strong class="text-yellow-300">{{link.value.type}}</strong>: 
+        <a [href]="link.value.url" target="_blank" class="underline hover:text-yellow-300">
+          {{link.value.url}}
+        </a>
+      </span>
+      <button type="button" (click)="removeDemoLink(i)" 
+              class="text-red-400 hover:text-red-300 text-xs">✖</button>
+    </li>
+  </ul>
+</div>
+
+
+  <!-- Submit -->
+  <div class="text-center">
+    <button type="submit"
+            class="w-full py-3 bg-yellow-400 text-slate-900 font-bold rounded-lg shadow-lg 
+                   hover:bg-yellow-300 hover:shadow-yellow-400/40 transition">
+      💾 Save Project
+    </button>
+  </div>
+</form>
