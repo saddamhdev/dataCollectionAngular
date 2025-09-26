@@ -229,7 +229,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'dev/project-detail/:title',
+    path: 'dev/projects/:title',
     loadComponent: () =>
       import('./dev/project-detail/project-detail.component').then(
         (m) => m.ProjectDetailComponent
