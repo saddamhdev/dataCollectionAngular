@@ -7,6 +7,7 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Routes } from '@angular/router';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -29,6 +30,43 @@ const angularApp = new AngularNodeAppEngine();
 /**
  * Serve static files from /browser
  */
+// Backend API থেকে project title আনার জন্য fetch ব্যবহার করা হবে
+export const serverRoutes: Routes = [
+  {
+    path: 'dev/project-detail/:title',
+    loadComponent: () =>
+      import('./app/dev/project-detail/project-detail.component').then(
+        (m) => m.ProjectDetailComponent
+      ),
+    data: {
+      prerender: {
+        getPrerenderParams: async () => {
+          try {
+            // 👉 এখানে আপনার backend API বসান
+            const res = await fetch('http://localhost:8080/api/projects');
+            const projects: any[] = await res.json();
+
+            // প্রতিটি project থেকে title কে slug বানিয়ে return করবো
+            return projects.map((p) => ({
+              title: slugify(p.title),
+            }));
+          } catch (err) {
+            console.error('❌ Failed to fetch projects for prerender:', err);
+            return [];
+          }
+        },
+      },
+    },
+  },
+];
+
+// Helper function for safe URLs
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, '-')     // space → dash
+    .replace(/[^\w-]+/g, ''); // special chars remove
+}
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',

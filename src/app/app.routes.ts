@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth.guard';
-
+import { RenderMode,ServerRoute } from '@angular/ssr';
 export const routes: Routes = [
   // Public
   {
