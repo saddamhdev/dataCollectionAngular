@@ -93,7 +93,6 @@ export class ProjectFormComponent implements OnInit {
   }
 
  loadProject(id: string) {
-   alert('✏️ Edit mode for project ID: ' + id);
   this.http.get<any>(`${this.apiUrl}/get/${id}`).subscribe({
     next: (p) => {
       console.log("📥 Loaded project:", p); // 👈 check structure
