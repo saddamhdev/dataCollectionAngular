@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth.guard';
 import { RenderMode,ServerRoute } from '@angular/ssr';
+import { ProjectFormComponent } from './dev/project-form/project-form.component';
 export const routes: Routes = [
   // Public
   {
@@ -234,6 +235,13 @@ export const routes: Routes = [
       import('./dev/project-detail/project-detail.component').then(
         (m) => m.ProjectDetailComponent
       ),
+  },
+   {
+  path: 'projects/edit/:id',
+  loadComponent: () =>
+    import('./dev/project-form/project-form.component').then(
+      (m) => m.ProjectFormComponent
+    ),
   },
 
   // Wildcard must be last
