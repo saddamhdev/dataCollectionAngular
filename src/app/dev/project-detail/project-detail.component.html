@@ -12,6 +12,7 @@
 
   <!-- 🔹 Specific Project -->
   <div *ngIf="project" class="mb-16">
+    
     <h2 class="text-3xl font-bold text-yellow-400 mb-6">
       🎯 Featured Project: {{ project.title }}
     </h2>
@@ -21,10 +22,18 @@
 
       <!-- Left: Project Details -->
       <div>
-        <div class="flex items-center gap-3 mb-4">
+      <div class="flex items-center gap-3 mb-4">
           <span class="text-2xl">{{ project.icon }}</span>
           <h3 class="text-xl font-bold text-yellow-300">{{ project.title }}</h3>
         </div>
+
+        <!-- 👇 Add Role Here -->
+        <div *ngIf="project.role" 
+            class="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold 
+                    bg-yellow-400 text-slate-900 shadow">
+          🎯 My Role: {{ project.role }}
+        </div>
+
         <p class="text-slate-400 text-sm leading-relaxed">{{ project.description }}</p>
 
         <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
@@ -73,6 +82,13 @@
         <span class="text-2xl">{{ p.icon }}</span>
         <h3 class="text-xl font-bold text-yellow-300">{{ p.title }}</h3>
       </div>
+      <!-- 👇 Add Role Here -->
+        <div *ngIf="p.role" 
+            class="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold 
+                    bg-yellow-400 text-slate-900 shadow">
+          🎯 My Role: {{ p.role }}
+        </div>
+
       <p class="text-slate-400 text-sm leading-relaxed">{{ p.description }}</p>
 
       <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">

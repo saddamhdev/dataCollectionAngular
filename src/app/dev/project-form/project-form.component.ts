@@ -35,6 +35,7 @@ export class ProjectFormComponent implements OnInit {
     this.projectForm = this.fb.group({
       title: this.fb.control('', { validators: Validators.required, nonNullable: true }),
       icon: this.fb.control('🎓', { nonNullable: true }),
+      role: this.fb.control('', { nonNullable: true }),   // dropdown binds here
       description: this.fb.control('', { nonNullable: true }),
       technologies: this.fb.array<FormControl<string>>([]),
       features: this.fb.array<FormControl<string>>([]),
@@ -100,6 +101,7 @@ export class ProjectFormComponent implements OnInit {
       this.projectForm.patchValue({
         title: p.title,
         icon: p.icon,
+        role: p.role,   // 👈 new
         description: p.description,
       });
 
