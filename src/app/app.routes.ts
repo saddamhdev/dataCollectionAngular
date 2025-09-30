@@ -236,6 +236,13 @@ export const routes: Routes = [
         (m) => m.ProjectDetailComponent
       ),
   },
+  {
+    path: 'projects/:title',
+    loadComponent: () =>
+      import('./dev/project-detail/project-detail.component').then(
+        (m) => m.ProjectDetailComponent
+      ),
+  },
    {
   path: 'projects/edit/:id',
   loadComponent: () =>

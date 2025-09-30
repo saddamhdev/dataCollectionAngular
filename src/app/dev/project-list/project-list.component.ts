@@ -35,7 +35,6 @@ export class ProjectListComponent implements OnInit {
   }
 
   deleteProject(id: string) {
-    alert("🗑 Delete project ID: " + id);
   if (!confirm("⚠ Are you sure you want to delete this project?")) return;
 
   // ✅ Use POST because backend expects POST /delete/{id}

@@ -3,7 +3,7 @@ import { environment } from './app/environments/environment';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: 'dev/projects/:title',
+    path: 'projects/:title',
     renderMode: RenderMode.Prerender,   // ✅ required field
     getPrerenderParams: async () => {
       try {
