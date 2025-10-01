@@ -337,5 +337,33 @@ checkSscRoll() {
     });
   }
 }
+allowBanglaOnly(event: KeyboardEvent) {
+  const pattern = /[\u0980-\u09FF\s]/;
+  const inputChar = String.fromCharCode(event.charCode);
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+}
 
+allowOnlyNumbers(event: KeyboardEvent) {
+  const pattern = /^[0-9]$/;
+  const inputChar = String.fromCharCode(event.charCode);
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+}
+
+allowDecimal(event: KeyboardEvent) {
+  const pattern = /[0-9.]/;
+  const inputChar = String.fromCharCode(event.charCode);
+
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+
+  const input = event.target as HTMLInputElement;
+  if (input.value.includes('.') && inputChar === '.') {
+    event.preventDefault();
+  }
+}
 }

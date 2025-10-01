@@ -31,7 +31,9 @@ export class PagePermissionComponent implements OnInit {
   message: string | null = null;
   messageType: 'success' | 'error' | null = null;
 
-
+ // ✅ expanded state
+  expandedUserId: number | null = null;
+  
   constructor(
     private userService: UserService,
     private permissionService: PagePermissionService,
@@ -205,4 +207,19 @@ applyFilter() {
     })
     .filter(u => u !== null) as typeof this.allUserPermissions;
 }
+
+ // ✅ Unique users getter
+  get uniqueUsers() {
+    const seen = new Set<number>();
+    return this.filteredUserPermissions.filter(u => {
+      if (seen.has(u.userId)) return false;
+      seen.add(u.userId);
+      return true;
+    });
+  }
+
+  // ✅ expand/collapse
+  toggleExpand(userId: number) {
+    this.expandedUserId = this.expandedUserId === userId ? null : userId;
+  }
 }

@@ -28,6 +28,13 @@ export class PublicSscFormComponent {
   currentIndex = 0;
   intervalId: any;
   backendUrl = environment.baseUrl;
+  showValidationModal = false;
+  missingFields: string[] = [];
+
+closeModal() {
+  this.showValidationModal = false;
+}
+
 
   private fb = inject(FormBuilder);
   private api = inject(StudentService);
@@ -67,6 +74,8 @@ export class PublicSscFormComponent {
   success = signal(false);
   error = signal<string | null>(null);
   private file: File | null = null;
+  showCongratsModal = false;   // 🎉 new modal toggle
+
 
   // Dropdown data
   locations: Record<string, Record<string, string[]>> = {};
@@ -199,51 +208,90 @@ onDistrictChange() {
   }
 
   async onSubmit() {
-  console.log('Form Data:', this.form.value);
   if (this.form.invalid) {
     this.form.markAllAsTouched();
+
+    // Collect missing fields
+    this.missingFields = Object.keys(this.form.controls)
+      .filter(k => this.form.get(k)?.invalid)
+      .map(k => {
+        switch (k) {
+          case 'banglaName': return 'পূর্ণ নাম (বাংলা)';
+          case 'englishName': return 'Full Name (English)';
+          case 'sscRoll': return 'SSC Roll';
+          case 'highSchool': return 'High School';
+          case 'sscDept': return 'SSC Department';
+          case 'sscResult': return 'SSC Result';
+          case 'sscMark': return 'SSC Marks';
+          case 'division': return 'Division';
+          case 'district': return 'District';
+          case 'upazila': return 'Upazila';
+          case 'target': return 'Professional Target';
+          case 'email': return 'Email';
+          case 'mobile': return 'Mobile';
+          case 'guardianMobile': return 'Guardian Mobile';
+          case 'agree': return 'Agreement Checkbox';
+          default: return k;
+        }
+      });
+
+    // 👉 Show Tailwind modal
+    this.showValidationModal = true;
     return;
   }
+
+  // ✅ Normal save/update logic
   this.loading.set(true);
   this.success.set(false);
   this.error.set(null);
 
   try {
     if (this.studentId) {
-      // 🔄 UPDATE
       await this.api.updateStudent(this.studentId, this.form.value).toPromise();
     } else {
-      // 🆕 CREATE
       await this.api.submitStudent(this.form.value, this.file);
     }
-
     this.success.set(true);
     this.form.reset({ agree: false });
     this.file = null;
+    // 🎉 Show congratulations modal
+    this.showCongratsModal = true;
   } catch (err: any) {
-    if (err.status === 200 || err.status === 201) {
-      this.success.set(true);
-      this.form.reset({ agree: false });
-      this.file = null;
-      return;
-    }
-
-    const pd = (err.error ?? {}) as {
-      detail?: string;
-      errors?: Array<{ field?: string; message?: string }>;
-    };
-    const list = Array.isArray(pd.errors) ? pd.errors : [];
-    list.forEach(({ field, message }) => {
-      const c = field ? this.form.get(field) : null;
-      if (c) c.setErrors({ ...(c.errors || {}), server: message });
-    });
-    this.error.set(
-      list.length
-        ? list.map(e => (e.field ? `${e.field}: ${e.message}` : e.message)).join(', ')
-        : (pd.detail || err.message || `Request failed (${err.status}).`)
-    );
+    console.error(err);
+    this.error.set(err.message || 'Failed to submit.');
   } finally {
     this.loading.set(false);
+  }
+}
+
+allowBanglaOnly(event: KeyboardEvent) {
+  const pattern = /[\u0980-\u09FF\s]/;
+  const inputChar = String.fromCharCode(event.charCode);
+  if (!pattern.test(inputChar)) {
+    event.preventDefault(); // ❌ Block non-Bangla chars
+  }
+}
+allowOnlyNumbers(event: KeyboardEvent) {
+  const pattern = /^[0-9]$/;
+  const inputChar = String.fromCharCode(event.charCode);
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+}
+
+allowDecimal(event: KeyboardEvent) {
+  const pattern = /[0-9.]/;
+  const inputChar = String.fromCharCode(event.charCode);
+
+  // Block if not a number or decimal point
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+
+  // Prevent multiple decimals
+  const input = event.target as HTMLInputElement;
+  if (input.value.includes('.') && inputChar === '.') {
+    event.preventDefault();
   }
 }
 

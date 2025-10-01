@@ -91,6 +91,17 @@
            class="px-4 py-2 border border-slate-600 rounded-lg text-sm w-72 bg-slate-800 text-slate-200 focus:ring-2 focus:ring-yellow-400">
   </div>
 
+  <!-- Permissions Table -->
+<div class="max-w-6xl mx-auto mt-10 bg-slate-900 p-6 rounded-2xl shadow-md border border-slate-700" *ngIf="allUserPermissions.length > 0">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xl font-bold text-yellow-400">📋 All Users Permissions</h3>
+    <input [(ngModel)]="searchText"
+           (input)="applyFilter()"
+           type="text"
+           placeholder="🔍 Search..."
+           class="px-4 py-2 border border-slate-600 rounded-lg text-sm w-72 bg-slate-800 text-slate-200 focus:ring-2 focus:ring-yellow-400">
+  </div>
+
   <div class="overflow-x-auto rounded-lg">
     <table class="w-full text-sm border-collapse">
       <thead>
@@ -102,35 +113,34 @@
         </tr>
       </thead>
       <tbody>
-  <ng-container *ngFor="let user of filteredUserPermissions">
-    <ng-container *ngFor="let menu of user.menus">
-      <ng-container *ngFor="let page of menu.pages">
-        <tr *ngFor="let comp of page.components" 
-            class="border-b border-slate-700 hover:bg-slate-800/60 transition">
-          <td class="px-4 py-2 font-semibold text-yellow-300">
-            {{ user.userName }} <span class="text-slate-400">({{ user.email }})</span>
-          </td>
+        <ng-container *ngFor="let user of uniqueUsers">
+          <!-- User Row -->
+          <tr class="cursor-pointer border-b border-slate-700 hover:bg-slate-800/60"
+              (click)="toggleExpand(user.userId)">
+            <td class="px-4 py-2 font-semibold text-yellow-300">
+              {{ user.userName }} <span class="text-slate-400">({{ user.email }})</span>
+            </td>
+            <td colspan="3" class="px-4 py-2 text-slate-400">
+              <span *ngIf="expandedUserId !== user.userId">▶ Click to view</span>
+              <span *ngIf="expandedUserId === user.userId">▼ Expanded</span>
+            </td>
+          </tr>
 
-          <!-- Menu Column -->
-          <td class="px-4 py-2">
-            {{ menu.checked ? menu.name : '-' }}
-          </td>
-
-          <!-- Page Column -->
-          <td class="px-4 py-2">
-            {{ page.checked ? page.name : '-' }}
-          </td>
-
-          <!-- Component Column -->
-          <td class="px-4 py-2">
-            {{ comp.checked ? comp.name : '-' }}
-          </td>
-        </tr>
-      </ng-container>
-    </ng-container>
-  </ng-container>
-</tbody>
-
+          <!-- Expanded details -->
+          <ng-container *ngIf="expandedUserId === user.userId">
+            <ng-container *ngFor="let menu of user.menus">
+              <ng-container *ngFor="let page of menu.pages">
+                <tr *ngFor="let comp of page.components" class="border-b border-slate-700 hover:bg-slate-800/60 transition">
+                  <td></td>
+                  <td class="px-4 py-2">{{ menu.checked ? menu.name : '-' }}</td>
+                  <td class="px-4 py-2">{{ page.checked ? page.name : '-' }}</td>
+                  <td class="px-4 py-2">{{ comp.checked ? comp.name : '-' }}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tbody>
     </table>
   </div>
 </div>

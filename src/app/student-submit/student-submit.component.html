@@ -22,13 +22,18 @@
   </div>
 
   <!-- FORM -->
+ <!-- FORM -->
   <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
     <div class="row g-1">
 
       <!-- Names -->
       <div class="col-12 col-lg-6">
         <label class="form-label">পূর্ণ নাম (বাংলা)</label>
-        <input class="form-control" type="text" formControlName="banglaName" placeholder="জন দো">
+        <input class="form-control" type="text" formControlName="banglaName" placeholder="সাদ্দাম হোসেন"  (keypress)="allowBanglaOnly($event)">
+        <div *ngIf="t('banglaName')?.invalid && t('banglaName')?.touched" class="text-danger text-sm">
+              শুধুমাত্র বাংলা অক্ষর ব্যবহার করুন।
+         </div>
+
       </div>
       <div class="col-12 col-lg-6">
         <label class="form-label">Full Name (English)</label>
@@ -41,7 +46,8 @@
         <input class="form-control"
               type="text"
               formControlName="sscRoll"
-              placeholder="SSC Roll"
+              placeholder="123456"
+              (keypress)="allowOnlyNumbers($event)"
               (blur)="checkSscRoll()" />
       </div>
       <div class="col-12 col-lg-6">
@@ -60,17 +66,17 @@
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">SSC Result</label>
-        <input class="form-control" type="text" formControlName="sscResult" placeholder="GPA 5.00">
+        <input class="form-control" type="text" formControlName="sscResult" placeholder="5.00" (keypress)="allowDecimal($event)">
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">SSC Marks</label>
-        <input class="form-control" type="text" formControlName="sscMark" placeholder="1100">
+        <input class="form-control" type="text" formControlName="sscMark" placeholder="1100" (keypress)="allowOnlyNumbers($event)">
       </div>
 
       <!-- HSC -->
       <div class="col-12 col-lg-6">
         <label class="form-label">HSC Roll</label>
-        <input class="form-control" type="text" formControlName="hscRoll" placeholder="HSC Roll">
+        <input class="form-control" type="text" formControlName="hscRoll" placeholder="123445" (keypress)="allowOnlyNumbers($event)">
       </div>
       <div class="col-12 col-lg-6">
         <label class="form-label">College / Madrasa</label>
@@ -88,11 +94,11 @@
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">HSC Result</label>
-        <input class="form-control" type="text" formControlName="hscResult" placeholder="GPA 5.00">
+        <input class="form-control" type="text" formControlName="hscResult" placeholder="GPA 5.00" (keypress)="allowDecimal($event)">
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">HSC Marks</label>
-        <input class="form-control" type="text" formControlName="hscMark" placeholder="1200">
+        <input class="form-control" type="text" formControlName="hscMark" placeholder="1200" (keypress)="allowOnlyNumbers($event)">
       </div>
 
       <!-- Location -->
@@ -151,8 +157,18 @@
       <!-- Terms -->
       <div class="col-12">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="agree" formControlName="agree">
-          <label class="form-check-label" for="agree">I confirm the information is accurate.</label>
+          <input type="checkbox"
+       id="agree"
+       formControlName="agree"
+       class="w-6 h-6 border-2 border-green-600 bg-green-200 rounded-md 
+              cursor-pointer appearance-none checked:bg-green-600 checked:border-green-700
+              relative checked:after:content-['✔'] checked:after:text-white 
+              checked:after:absolute checked:after:inset-0 checked:after:flex 
+              checked:after:items-center checked:after:justify-center">
+        <label for="agree" class="ml-2 cursor-pointer">
+          I confirm the information is accurate.
+        </label>
+
         </div>
       </div>
 
@@ -162,7 +178,7 @@
       <button *ngIf="!studentId"
               class="btn btn-success px-4 py-2 fw-semibold"
               type="submit"
-              [disabled]="form.invalid || loading()">
+              >
         {{ loading() ? 'Submitting...' : 'Submit' }}
       </button>
 
@@ -170,7 +186,7 @@
       <button *ngIf="studentId"
               class="btn btn-warning px-4 py-2 fw-semibold"
               type="submit"
-              [disabled]="form.invalid || loading()">
+             >
         {{ loading() ? 'Updating...' : 'Update' }}
       </button>
     </div>

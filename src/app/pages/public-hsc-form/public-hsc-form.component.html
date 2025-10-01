@@ -28,7 +28,11 @@
       <!-- Names -->
       <div class="col-12 col-lg-6">
         <label class="form-label">পূর্ণ নাম (বাংলা)</label>
-        <input class="form-control" type="text" formControlName="banglaName" placeholder="জন দো">
+        <input class="form-control" type="text" formControlName="banglaName" placeholder="সাদ্দাম হোসেন"  (keypress)="allowBanglaOnly($event)">
+        <div *ngIf="t('banglaName')?.invalid && t('banglaName')?.touched" class="text-danger text-sm">
+              শুধুমাত্র বাংলা অক্ষর ব্যবহার করুন।
+         </div>
+
       </div>
       <div class="col-12 col-lg-6">
         <label class="form-label">Full Name (English)</label>
@@ -41,7 +45,8 @@
         <input class="form-control"
               type="text"
               formControlName="sscRoll"
-              placeholder="SSC Roll"
+              placeholder="123456"
+              (keypress)="allowOnlyNumbers($event)"
               (blur)="checkSscRoll()" />
       </div>
       <div class="col-12 col-lg-6">
@@ -60,17 +65,17 @@
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">SSC Result</label>
-        <input class="form-control" type="text" formControlName="sscResult" placeholder="GPA 5.00">
+        <input class="form-control" type="text" formControlName="sscResult" placeholder="5.00" (keypress)="allowDecimal($event)">
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">SSC Marks</label>
-        <input class="form-control" type="text" formControlName="sscMark" placeholder="1100">
+        <input class="form-control" type="text" formControlName="sscMark" placeholder="1100" (keypress)="allowOnlyNumbers($event)">
       </div>
 
       <!-- HSC -->
       <div class="col-12 col-lg-6">
         <label class="form-label">HSC Roll</label>
-        <input class="form-control" type="text" formControlName="hscRoll" placeholder="HSC Roll">
+        <input class="form-control" type="text" formControlName="hscRoll" placeholder="123445" (keypress)="allowOnlyNumbers($event)">
       </div>
       <div class="col-12 col-lg-6">
         <label class="form-label">College / Madrasa</label>
@@ -88,11 +93,11 @@
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">HSC Result</label>
-        <input class="form-control" type="text" formControlName="hscResult" placeholder="GPA 5.00">
+        <input class="form-control" type="text" formControlName="hscResult" placeholder="GPA 5.00" (keypress)="allowDecimal($event)">
       </div>
       <div class="col-6 col-lg-3">
         <label class="form-label">HSC Marks</label>
-        <input class="form-control" type="text" formControlName="hscMark" placeholder="1200">
+        <input class="form-control" type="text" formControlName="hscMark" placeholder="1200" (keypress)="allowOnlyNumbers($event)">
       </div>
 
       <!-- Location -->
@@ -151,8 +156,18 @@
       <!-- Terms -->
       <div class="col-12">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="agree" formControlName="agree">
-          <label class="form-check-label" for="agree">I confirm the information is accurate.</label>
+          <input type="checkbox"
+       id="agree"
+       formControlName="agree"
+       class="w-6 h-6 border-2 border-green-600 bg-green-200 rounded-md 
+              cursor-pointer appearance-none checked:bg-green-600 checked:border-green-700
+              relative checked:after:content-['✔'] checked:after:text-white 
+              checked:after:absolute checked:after:inset-0 checked:after:flex 
+              checked:after:items-center checked:after:justify-center">
+        <label for="agree" class="ml-2 cursor-pointer">
+          I confirm the information is accurate.
+        </label>
+
         </div>
       </div>
 
@@ -162,7 +177,7 @@
       <button *ngIf="!studentId"
               class="btn btn-success px-4 py-2 fw-semibold"
               type="submit"
-              [disabled]="form.invalid || loading()">
+              >
         {{ loading() ? 'Submitting...' : 'Submit' }}
       </button>
 
@@ -170,7 +185,7 @@
       <button *ngIf="studentId"
               class="btn btn-warning px-4 py-2 fw-semibold"
               type="submit"
-              [disabled]="form.invalid || loading()">
+             >
         {{ loading() ? 'Updating...' : 'Update' }}
       </button>
     </div>
@@ -218,3 +233,49 @@
     </div>
   </form>
 </div>
+
+
+<!-- Validation Modal -->
+<div *ngIf="showValidationModal"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white dark:bg-slate-900 rounded-xl shadow-lg w-full max-w-md p-6 relative">
+    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+      <h3 class="text-lg font-bold text-red-600">⚠️ Incomplete Form</h3>
+      <button (click)="closeModal()" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">✖</button>
+    </div>
+    <div class="mt-4">
+      <p class="text-slate-700 dark:text-slate-300">Please fill all required fields before submitting:</p>
+      <ul class="list-disc list-inside mt-2 text-sm text-red-500 space-y-1">
+        <li *ngFor="let f of missingFields">{{ f }}</li>
+      </ul>
+    </div>
+    <div class="mt-6 flex justify-end">
+      <button (click)="closeModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🎉 Congratulations Modal -->
+<div *ngIf="showCongratsModal"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 text-center relative">
+    
+    <!-- Header -->
+    <div class="flex justify-center mb-4">
+      <span class="text-5xl">🎉</span>
+    </div>
+    
+    <!-- Body -->
+    <h3 class="text-2xl font-bold text-green-600">Congratulations!</h3>
+    <p class="mt-2 text-slate-700">Your submission has been saved successfully.</p>
+    
+    <!-- Footer -->
+    <div class="mt-6 flex justify-center">
+      <button (click)="showCongratsModal = false"
+              class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg shadow">
+        OK
+      </button>
+    </div>
+  </div>
+</div>
+

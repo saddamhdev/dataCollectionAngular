@@ -289,6 +289,36 @@ onDistrictChange() {
     this.loading.set(false);
   }
 }
+allowBanglaOnly(event: KeyboardEvent) {
+  const pattern = /[\u0980-\u09FF\s]/;
+  const inputChar = String.fromCharCode(event.charCode);
+  if (!pattern.test(inputChar)) {
+    event.preventDefault(); // ❌ Block non-Bangla chars
+  }
+}
+allowOnlyNumbers(event: KeyboardEvent) {
+  const pattern = /^[0-9]$/;
+  const inputChar = String.fromCharCode(event.charCode);
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+}
+
+allowDecimal(event: KeyboardEvent) {
+  const pattern = /[0-9.]/;
+  const inputChar = String.fromCharCode(event.charCode);
+
+  // Block if not a number or decimal point
+  if (!pattern.test(inputChar)) {
+    event.preventDefault();
+  }
+
+  // Prevent multiple decimals
+  const input = event.target as HTMLInputElement;
+  if (input.value.includes('.') && inputChar === '.') {
+    event.preventDefault();
+  }
+}
 
 
 }
