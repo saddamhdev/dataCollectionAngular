@@ -16,7 +16,8 @@ export class ProjectDetailComponent implements OnInit {
   project: any;
   otherProjects: any[] = [];
   youtubeUrl: SafeResourceUrl | null = null;
-
+ showFullDescription: boolean = false;  // ✅ toggle for main project description
+  showAllFeatures: boolean = false;      // ✅ toggle for main project features
   private apiUrl = `${environment.baseUrl}/api/projects`;
 
   constructor(

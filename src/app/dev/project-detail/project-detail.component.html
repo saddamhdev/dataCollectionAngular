@@ -12,39 +12,55 @@
 
   <!-- 🔹 Specific Project -->
   <div *ngIf="project" class="mb-16">
-    
     <h2 class="text-3xl font-bold text-yellow-400 mb-6">
       🎯 Featured Project: {{ project.title }}
     </h2>
 
-    <!-- Two-column layout -->
     <div class="grid md:grid-cols-2 gap-8 p-6 bg-slate-800 rounded-xl shadow-lg">
 
       <!-- Left: Project Details -->
       <div>
-      <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center gap-3 mb-4">
           <span class="text-2xl">{{ project.icon }}</span>
           <h3 class="text-xl font-bold text-yellow-300">{{ project.title }}</h3>
         </div>
 
-        <!-- 👇 Add Role Here -->
         <div *ngIf="project.role" 
             class="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold 
                     bg-yellow-400 text-slate-900 shadow">
           🎯 My Role: {{ project.role }}
         </div>
 
-        <p class="text-slate-400 text-sm leading-relaxed">{{ project.description }}</p>
+        <!-- ✅ Description with toggle -->
+        <p class="text-slate-400 text-sm leading-relaxed">
+          {{ showFullDescription ? project.description : (project.description | slice:0:200) }}
+          <span *ngIf="!showFullDescription && project.description?.length > 200">...</span>
+        </p>
+        <button *ngIf="project.description?.length > 200"
+                (click)="showFullDescription = !showFullDescription"
+                class="mt-2 text-yellow-400 text-xs font-semibold hover:underline focus:outline-none">
+          {{ showFullDescription ? 'Show Less' : 'Show More' }}
+        </button>
 
+        <!-- ✅ Technologies -->
         <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
           <span *ngFor="let tech of project.technologies"
                 class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">{{ tech }}</span>
         </div>
 
+        <!-- ✅ Features with toggle -->
         <ul class="mt-3 text-xs text-slate-400 space-y-1">
-          <li *ngFor="let f of project.features">✅ {{ f }}</li>
+          <li *ngFor="let f of (showAllFeatures ? project.features : (project.features | slice:0:5))">
+            ✅ {{ f }}
+          </li>
         </ul>
+        <button *ngIf="project.features?.length > 5"
+                (click)="showAllFeatures = !showAllFeatures"
+                class="mt-2 text-yellow-400 text-xs font-semibold hover:underline focus:outline-none">
+          {{ showAllFeatures ? 'Show Less' : 'Show More' }}
+        </button>
 
+        <!-- Demo Links -->
         <div class="mt-5 flex flex-wrap gap-3">
           <a *ngFor="let link of project.demoLinks" style="text-decoration: none;"
              [href]="link.url" target="_blank"
@@ -82,23 +98,43 @@
         <span class="text-2xl">{{ p.icon }}</span>
         <h3 class="text-xl font-bold text-yellow-300">{{ p.title }}</h3>
       </div>
-      <!-- 👇 Add Role Here -->
-        <div *ngIf="p.role" 
-            class="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold 
-                    bg-yellow-400 text-slate-900 shadow">
-          🎯 My Role: {{ p.role }}
-        </div>
 
-      <p class="text-slate-400 text-sm leading-relaxed">{{ p.description }}</p>
+      <div *ngIf="p.role" 
+          class="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold 
+                  bg-yellow-400 text-slate-900 shadow">
+        🎯 My Role: {{ p.role }}
+      </div>
 
+      <!-- ✅ Description toggle -->
+      <p class="text-slate-400 text-sm leading-relaxed">
+        {{ p.showFullDescription ? p.description : (p.description | slice:0:200) }}
+        <span *ngIf="!p.showFullDescription && p.description?.length > 200">...</span>
+      </p>
+      <button *ngIf="p.description?.length > 200"
+              (click)="p.showFullDescription = !p.showFullDescription"
+              class="mt-2 text-yellow-400 text-xs font-semibold hover:underline focus:outline-none">
+        {{ p.showFullDescription ? 'Show Less' : 'Show More' }}
+      </button>
+
+      <!-- ✅ Technologies -->
       <div class="mt-4 mb-3 flex flex-wrap gap-2 text-xs">
         <span *ngFor="let tech of p.technologies" 
               class="bg-slate-700 text-yellow-300 px-2 py-1 rounded">{{ tech }}</span>
       </div>
-       <ul class="mt-3 text-xs text-slate-400 space-y-1">
-          <li *ngFor="let f of p.features">✅ {{ f }}</li>
-        </ul>
 
+      <!-- ✅ Features toggle -->
+      <ul class="mt-3 text-xs text-slate-400 space-y-1">
+        <li *ngFor="let f of (p.showAllFeatures ? p.features : (p.features | slice:0:5))">
+          ✅ {{ f }}
+        </li>
+      </ul>
+      <button *ngIf="p.features?.length > 5"
+              (click)="p.showAllFeatures = !p.showAllFeatures"
+              class="mt-2 text-yellow-400 text-xs font-semibold hover:underline focus:outline-none">
+        {{ p.showAllFeatures ? 'Show Less' : 'Show More' }}
+      </button>
+
+      <!-- Demo Links -->
       <div class="mt-5 flex flex-wrap gap-3">
         <a *ngFor="let link of p.demoLinks" style="text-decoration: none;"
            [href]="link.url" target="_blank"
@@ -111,18 +147,54 @@
     </div>
   </div>
 
- <!-- 🔹 Footer / Client Value -->
-<div class="text-center mt-16 max-w-3xl mx-auto" *ngIf="project">
-  <h3 class="text-xl font-bold text-yellow-400 mb-4">💡 Why This Project Matters</h3>
-  <p class="text-slate-300 leading-relaxed">
-    This project demonstrates 
-    <span class="text-yellow-300">
-      real-world enterprise-grade solutions built with 
-      {{ project.technologies.join(', ') }}
-    </span>.  
-    It highlights clean code, scalable design,  
-    and a focus on delivering measurable business outcomes.
+  <!-- 🔹 Footer -->
+  <div class="text-center mt-16 max-w-3xl mx-auto" *ngIf="project">
+    <h3 class="text-xl font-bold text-yellow-400 mb-4">💡 Why This Project Matters</h3>
+    <p class="text-slate-300 leading-relaxed">
+      This project demonstrates 
+      <span class="text-yellow-300">
+        real-world enterprise-grade solutions built with 
+        {{ project.technologies.join(', ') }}
+      </span>.  
+      It highlights clean code, scalable design,  
+      and a focus on delivering measurable business outcomes.
+    </p>
+  </div>
+
+  <div class="text-center mt-20 max-w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-16 px-6">
+  <h3 class="text-2xl font-extrabold text-yellow-400 mb-4 flex justify-center items-center gap-2">
+    <i class="fas fa-paper-plane text-yellow-300"></i> Get in Touch
+  </h3>
+
+  <p class="text-slate-300 mb-10 text-lg leading-relaxed max-w-2xl mx-auto">
+    Interested in collaborating, hiring, or learning more about my work?  
+    Let’s connect on my professional platforms:
   </p>
-</div>
+
+  <!-- Contact Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+
+  <!-- Upwork -->
+  <a href="https://www.upwork.com/freelancers/~016780b3d37dc0c4c4" target="_blank" style="text-decoration: none;"
+     class="group p-6 rounded-xl bg-slate-800 shadow-lg hover:shadow-yellow-400/30 
+            hover:-translate-y-1 transition transform text-center text-yellow-300 no-underline">
+    <i class="fas fa-laptop-code text-3xl text-yellow-400 group-hover:scale-110 transition"></i>
+    <h4 class="mt-3 font-semibold text-yellow-300">Upwork</h4>
+    <p class="text-slate-400 text-sm">Remote & contract projects</p>
+  </a>
+
+  <!-- LinkedIn -->
+  <a href="https://www.linkedin.com/in/saddamhdev" target="_blank" style="text-decoration: none;"
+     class="group p-6 rounded-xl bg-slate-800 shadow-lg hover:shadow-blue-400/30 
+            hover:-translate-y-1 transition transform text-center text-blue-300 no-underline">
+    <i class="fab fa-linkedin text-3xl text-blue-400 group-hover:scale-110 transition"></i>
+    <h4 class="mt-3 font-semibold text-blue-300">LinkedIn</h4>
+    <p class="text-slate-400 text-sm">Professional networking</p>
+  </a>
 
 </div>
+
+
+</div>
+   <!-- 🔹 Contact Info -->
+
