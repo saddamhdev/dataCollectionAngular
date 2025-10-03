@@ -230,14 +230,14 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'dev/projects/:title',
+    path: 'dev/projects/:id',
     loadComponent: () =>
       import('./dev/project-detail/project-detail.component').then(
         (m) => m.ProjectDetailComponent
       ),
   },
   {
-    path: 'projects/:title',
+    path: 'projects/:id',
     loadComponent: () =>
       import('./dev/project-detail/project-detail.component').then(
         (m) => m.ProjectDetailComponent

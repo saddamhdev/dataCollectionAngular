@@ -28,11 +28,11 @@ export class ProjectDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      const title = params.get('title');
-      if (title) {
-        console.log('📌 Loading project with title:', title);
+      const id = params.get('id');  // ✅ changed from 'title' to 'id'
+      if (id) {
+        console.log('📌 Loading project with id:', id);
 
-        this.http.get<any>(`${this.apiUrl}/${title}`).subscribe(res => {
+        this.http.get<any>(`${this.apiUrl}/${id}`).subscribe(res => {
           this.project = res;
           console.log('📦 Project loaded from backend:', this.project);
 
@@ -60,14 +60,15 @@ export class ProjectDetailComponent implements OnInit {
       }
 
       // Load all other projects
-      this.http.get<any[]>(this.apiUrl).subscribe(res => {
-        if (title) {
-          this.otherProjects = res.filter(p => p.title !== title);
-        } else {
-          this.otherProjects = res;
-        }
-        console.log('📚 Other projects loaded:', this.otherProjects);
-      });
+     this.http.get<any[]>(this.apiUrl).subscribe(res => {
+      if (id) {
+        const numericId = Number(id);
+        this.otherProjects = res.filter(p => p.id !== numericId);
+      } else {
+        this.otherProjects = res;
+      }
+    });
+
     });
   }
 
