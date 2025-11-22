@@ -2,14 +2,27 @@ pipeline {
     agent any
 
     environment {
-        PROD_HOST  = credentials('DO_HOST')
-        PROD_USER  = credentials('DO_USER')
-        DEPLOY_DIR = '/www/wwwroot/CITSNVN/jenkins/angular'
-        BACKUP_DIR = '/www/wwwroot/CITSNVN/jenkins/angular_backup'
-        BUILD_DIR  = 'dist/my-project'
+        PROD_USER = "root"
+        PROD_HOST = "159.89.172.251"
+
+        DEPLOY_DIR = "/www/wwwroot/CITSNVN/jenkins/angular"
+        BACKUP_DIR = "/www/wwwroot/CITSNVN/jenkins/angular_backup"
+        BUILD_DIR  = "dist/my-project"
     }
 
     stages {
+
+        stage('Verify Credentials') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'DO_SSH_PASSWORD',
+                    usernameVariable: 'SSH_USER',
+                    passwordVariable: 'SSH_PASS'
+                )]) {
+                    echo "🟢 Password credentials OK"
+                }
+            }
+        }
 
         stage('Checkout') {
             steps {
@@ -23,119 +36,83 @@ pipeline {
             }
         }
 
-        stage('Verify Files') {
-            steps {
-                sh 'ls -la src/app/environments'
-            }
-        }
-
-        stage('Build Angular Project') {
+        stage('Build Angular') {
             steps {
                 sh 'ng build --configuration=production'
             }
         }
 
-        stage('Backup Current Deployment') {
+        stage('Backup Old Deployment') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'DO_SSH_PASSWORD',
+                    usernameVariable: 'SSH_USER',
+                    passwordVariable: 'SSH_PASS'
+                )]) {
+
                     sh '''
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} '
-                            echo "📦 Backing up current deployment..."
-                            if [ -d "${DEPLOY_DIR}" ]; then
-                                rm -rf ${BACKUP_DIR}
-                                cp -r ${DEPLOY_DIR} ${BACKUP_DIR}
-                                echo "✅ Backup created."
+                        echo "📦 Creating backup..."
+                        sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_HOST} "
+                            if [ -d '${DEPLOY_DIR}' ]; then
+                                rm -rf ${BACKUP_DIR};
+                                cp -r ${DEPLOY_DIR} ${BACKUP_DIR};
+                                echo '✅ Backup done';
                             else
-                                echo "⚠️ No current deployment found, skipping backup."
+                                echo '⚠️ No old deployment found';
                             fi
-                        '
+                        "
                     '''
                 }
             }
         }
 
-        stage('Deploy to DigitalOcean') {
+        stage('Deploy Angular Build') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'DO_SSH_PASSWORD',
+                    usernameVariable: 'SSH_USER',
+                    passwordVariable: 'SSH_PASS'
+                )]) {
+
                     sh '''
-                        scp -o StrictHostKeyChecking=no -i "$SSH_KEY" -r dist/my-project/* \
+                        echo "🚀 Uploading Angular build..."
+                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r dist/my-project/* \
                         ${PROD_USER}@${PROD_HOST}:${DEPLOY_DIR}
                     '''
                 }
             }
         }
 
-        stage('Reload NGINX & Restart Backend') {
+        stage('Reload NGINX') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'DO_SSH_PASSWORD',
+                    usernameVariable: 'SSH_USER',
+                    passwordVariable: 'SSH_PASS'
+                )]) {
+
                     sh '''
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} '
-                            echo "🔁 Testing NGINX config..."
-                            NG_BIN="/www/server/nginx/sbin/nginx"
-                            NG_CONF="/www/server/nginx/conf/nginx.conf"
-                            NG_PID="/www/server/nginx/logs/nginx.pid"
+                        echo "🔁 Reloading NGINX..."
+                        sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ${PROD_USER}@${PROD_HOST} "
+                            NG=/www/server/nginx/sbin/nginx;
+                            CONF=/www/server/nginx/conf/nginx.conf;
 
-                            sudo "$NG_BIN" -t -c "$NG_CONF"
-
-                            if [ ! -s "$NG_PID" ]; then
-                                MASTER_PID=$(pgrep -o nginx || true)
-                                if [ -n "$MASTER_PID" ]; then
-                                    echo "$MASTER_PID" | sudo tee "$NG_PID"
-                                fi
-                            fi
-
-                            echo "🔄 Reloading NGINX..."
-                            sudo "$NG_BIN" -s reload
-                            echo "✅ NGINX reloaded successfully."
-                        '
+                            sudo \$NG -t -c \$CONF && sudo \$NG -s reload;
+                            echo '✅ NGINX reload complete';
+                        "
                     '''
                 }
             }
         }
+
     }
 
     post {
         success {
-            echo '✅ Angular build and deploy complete!'
+            echo "🎉 Deployment Successful!"
         }
-
         failure {
-            script {
-                echo '❌ Build or deployment failed. Starting rollback...'
-            }
-
-            withCredentials([sshUserPrivateKey(credentialsId: 'DO_SSH_KEY', keyFileVariable: 'SSH_KEY')]) {
-                sh '''
-                    ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ${PROD_USER}@${PROD_HOST} '
-                        echo "⏪ Rolling back to previous deployment..."
-                        if [ -d "${BACKUP_DIR}" ]; then
-                            rm -rf ${DEPLOY_DIR}
-                            cp -r ${BACKUP_DIR} ${DEPLOY_DIR}
-                            echo "✅ Rollback restored."
-                        else
-                            echo "⚠️ No backup available to rollback."
-                        fi
-
-                        NG_BIN="/www/server/nginx/sbin/nginx"
-                        NG_CONF="/www/server/nginx/conf/nginx.conf"
-                        NG_PID="/www/server/nginx/logs/nginx.pid"
-
-                        sudo "$NG_BIN" -t -c "$NG_CONF"
-
-                        if [ ! -s "$NG_PID" ]; then
-                          MASTER_PID=$(pgrep -o nginx || true)
-                          if [ -n "$MASTER_PID" ]; then
-                            echo "$MASTER_PID" | sudo tee "$NG_PID"
-                          fi
-                        fi
-
-                        sudo "$NG_BIN" -s reload
-                        echo "✅ Rollback completed & NGINX reloaded."
-                    '
-                '''
-            }
-
-            echo "📧 Email notification skipped (no SMTP configured)."
+            echo "❌ Deployment Failed!"
         }
     }
 }
